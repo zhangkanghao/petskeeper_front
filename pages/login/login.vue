@@ -1,53 +1,58 @@
 <template>
 	<view class="main">
-		<!-- 手机导航栏占位 -->
-		<view class="mainHead"></view>
-		<!-- 登录上方菜单栏 -->
-		<view class="loginTop">
-			<view class="loginTopBack">
-				<image src="../../static/fanhui.png" mode="aspectFill" class="loginTopBack"></image>
-			</view>
-			<view class="loginTopCode" v-if="loginMode == 1" @click="loginCode">验证码登录</view>
-			<view class="loginTopCode" v-else-if="loginMode == 2" @click="loginPhone">账号密码登录</view>
-		</view>
 		<!-- 登录框 -->
 		<view class="loginBox">
-			<view class="logoImgBox">
-				<image :src="loginImage" mode="aspectFill" class="logoImgBox"></image>
+			<view class="loginLogo">
+				<image :src="loginImage" mode="aspectFill"></image>
 			</view>
-			<view class="loginInptu">
-				<input type="text" v-if="loginMode == 1" class="username" value="" placeholder="请输入用户名/手机号" maxlength="11" @input="phoneInput"/>
-				<input type="number" v-else-if="loginMode == 2" class="username" value="" placeholder="请输入手机号" maxlength="11" @input="phoneInput"/>
+			<view class="loginUser">
+				<image v-if="loginMode==1" src="../../static/img/login/login-uname.png" mode="aspectFill"></image>
+				<image v-else-if="loginMode==2" src="../../static/img/login/login-phone.png" mode="aspectFill"></image>
+				<input v-if="loginMode==1" type="text" placeholder="请输入用户名"/>
+				<input v-else-if="loginMode==2" type="number" placeholder="请输入手机号" length="11" @input="usernameInput"/>
 			</view>
-			<view class="loginInptu" v-if="loginMode == 1">
-				<input type="password" class="password" value="" placeholder="请输入密码" maxlength="16" @input="passwordInpur"/>
+			<view class="loginPwd">
+				<image src="../../static/img/login/login-pwd.png" mode="aspectFill"></image>
+				<view v-if="loginMode==1">
+					<input  type="password" placeholder="请输入密码" maxlength="16" @input="passwordInpur"/>
+				</view>
+				<view v-else-if="loginMode==2" class="loginPwdCode"> 
+					<input type="number" placeholder="请输入验证码" length="4" @input="codeInput"/>
+					<view class="uni-padding-wrap uni-common-mt" @click="getCode"><button type="primary">验证</button></view>
+				</view>
 			</view>
-			<view class="loginInptu loginInptuCode" v-else-if="loginMode == 2">
-				<input type="text" class="code" value="" placeholder="请输入验证码" maxlength="4" @input="codeInput"/>
-				<view class="huoquyanzhengma" @click="getCode">{{codeBut}}</view>
-			</view>
-			<view class="loginUp" @click="loginUp">
-				<image src="../../static/denglu.png" mode=""></image>
+			<view class="loginBtn uni-padding-wrap uni-common-mt" @click="loginUp">
+				<button type="primary">登录</button>
 			</view>
 		</view>
+		
+		
+		
 		<!-- 其他登录方式 -->
-		<view class="otherLoginTitle">————————其他登录方式————————</view>
+		<view class="otherLoginTitle">— 第三方登录 —</view>
 		<view class="otherLogin">
 			<view class="weiixnLogin" @click="weixinlogin">
-				<image src="../../static/weixin.png" mode=""></image>
+				<image class="loginIcon" src="../../static/img/login/weixin.png" mode=""></image>
 			</view>
 			<view class="qqLogin" @click="qqlogin">
-				<image src="../../static/QQ.png" mode=""></image>
+				<image src="../../static/img/login/QQ.png" mode=""></image>
 			</view>
 			<view class="weiboLogin" @click="weibologin">
-				<image src="../../static/weibo.png" mode=""></image>
+				<image  src="../../static/img/login/weibo.png" mode=""></image>
 			</view>
 		</view>
 
 		<!-- 忘记密码/新用户注册 -->
 		<view class="bottomBox">
-			<view class="wangjimima">忘记密码</view>
+			<view>
+				<view class="loginType" v-if="loginMode == 1" @click="loginCode">手机登录</view>
+				<view class="loginType" v-else-if="loginMode == 2" @click="loginPhone">密码登录</view>
+			</view>
 			<view class="yonghuzhuce">用户注册</view>
+			<view>
+				<view class="forgetPwd" v-if="loginMode == 1" @click="">忘记密码</view>
+				<view class="captcha" v-else-if="loginMode == 2" @click="">收不到验证码?</view>
+			</view>
 		</view>
 	</view>
 </template>
@@ -58,10 +63,10 @@
 			return {
 				loginMode: 1,
 				usernameType:"text",
-				codeBut:"获取验证码",
+				codeBut:"验证",
 				loginImage:"../../static/logo.png",
 				codeClick:true,
-				phone:"",
+				username:"",
 				password:"",
 				code:"",
 			}
@@ -79,8 +84,8 @@
 				this.usernameType = "text"
 			},
 			// 手机号输入
-			phoneInput(e){
-				this.phone = e.detail.value
+			usernameInput(e){
+				this.username = e.detail.value
 			},
 			// 密码输入
 			passwordInpur(e){
@@ -208,7 +213,7 @@
 	}
 
 	.main {
-		background: #FDE23D;
+		background: #fff;
 		width: 100%;
 		height: 100%;
 	}
@@ -217,35 +222,14 @@
 		height: var(--status-bar-height);
 	}
 
-	.loginTop {
-		width: 700upx;
-		margin: 0 auto;
-		height: 40upx;
-		line-height: 40upx;
-		display: flex;
-		justify-content: space-between;
-		font-size: 30upx;
-		margin-top: 10upx;
-	}
-
-	.loginTopBack {
-		width: 35upx;
-		height: 35upx;
-	}
 
 	.loginUp {
-		width: 100upx;
-		height: 100upx;
-		margin: 0 auto;
+		margin-top: 30upx;
 		padding: 15upx;
-		border: 1upx solid #333333;
-		border-radius: 60upx;
-		margin-top: 60upx;
-		background: #333333;
 	}
 
 	.code {
-		background: url(../../static/code.png)no-repeat;
+		background: url(../../static/img/login/code.png)no-repeat;
 		background-position: 10upx;
 		padding-left: 65upx;
 		width: 300upx;
@@ -253,55 +237,106 @@
 	}
 
 	.huoquyanzhengma {
-		background: #333333;
+		background: #007AFF;
 		color: #fff;
-		line-height: 85upx;
-		width: 200upx;
+		line-height: 40upx;
+		width: 20%;
 		text-align: center;
 		border-radius: 10upx;
 	}
 
 	.loginBox {
-		width: 650upx;
-		margin: 60upx auto;
+		width: 95%;
+		height: 60%;
+		margin: auto;
+		padding-top: 50upx;
 	}
-
-	.username {
-		background: url(../../static/shouji.png)no-repeat;
-		background-position: 10upx;
-		padding-left: 65upx;
-	}
-
-	.password {
-		background: url(../../static/mima.png)no-repeat;
-		background-position: 5upx;
-		padding-left: 70upx;
-	}
-
-	.loginInptu {
-		width: 500upx;
-		height: 80upx;
+	
+	.loginLogo{
+		width: 70%;
+		height: 60%;
 		margin: 0 auto;
-		background: #fff;
-		margin-top: 20upx;
-		line-height: 80upx;
-		border-radius: 10upx;
 	}
-
-	.loginInptuCode {
+	.loginLogo>image{
+		margin: 0 auto;
+		width: 100%;
+	}
+	.loginUser{
+		height: 10%;
+		width: 80%;
+		margin: 10upx auto;
+		padding: 10upx auto;
+		justify-content: center;
+		display: flex;
+		
+	}
+	.loginUser>image{
+		margin-left: 0;
+		width: 50upx;
+		height: 50upx;
+	}
+	.loginUser>input{
+		margin-top: 15upx;
+		margin-left: 15upx;
+		width: 75%;
+		height: 40upx;
+		line-height: 40upx;
+		border-bottom: #C0C0C0 1upx inset;
+	}
+	.loginPwd{
+		height: 10%;
+		width: 80%;
+		margin: 10upx auto;
+		justify-content: center;
+		display: flex;
+		padding: 10upx auto;
+	}
+	.loginPwd>image{
+		margin-left: 0;
+		width: 50upx;
+		height: 50upx;
+	}
+	.loginPwd>view{
+		margin-top: 15upx;
+		margin-left: 15upx;
+		width: 75%;
+		height: 40upx;
+		line-height: 40upx;
+		border-bottom: #C0C0C0 1upx inset;
+	}
+	.loginPwdCode{
+		justify-content: center;
 		display: flex;
 	}
-
-	.loginInptu>input {
-		height: 100%;
-		font-size: 30upx;
+	.loginPwd>view>input{
+		width: auto;
+		line-height: 40upx;
 	}
+	.loginPwd>view>view>button{
+		background: #007AFF;
+		color: #fff;
+		line-height: 40upx;
+		font-size:30upx;
+		height: 100%;
+		width: 100%;
+		margin: 0 0;
+		border-radius: 10upx;
+	}
+	.loginBtn{
+		height: 10%;
+		width: 70%;
+		margin: 10upx auto;
+		padding: 10upx auto;
+	}
+	
+
 
 	.logoImgBox {
 		width: 200upx;
 		height: 200upx;
 		margin: 0 auto;
-		margin-bottom: 50upx;
+		margin-top: 15upx;
+		padding-bottom: 30upx;
 	}
 
 	.otherLogin {
@@ -312,9 +347,9 @@
 		justify-content: space-between;
 	}
 
-	.otherLogin>view {
-		width: 95upx;
-		height: 95upx;
+	.otherLogin>view>image {
+		width: 100upx;
+		height: 100upx;
 		background: #fff;
 		border-radius: 95upx;
 	}
@@ -339,14 +374,22 @@
 		line-height: 30upx;
 		font-size: 32upx;
 	}
-
-	.wangjimima {
-		border-right: 1rpx solid #555;
-		height: 25upx;
+	.loginType{
 		padding-right: 15upx;
 	}
 
-	.yonghuzhuce {
+	.forgetPwd {
 		padding-left: 15upx;
+	}
+	.captcha{
+		padding-left: 15upx;
+	}
+
+	.yonghuzhuce {
+		border-left: 1rpx solid #555;
+		border-right: 1rpx solid #555;
+		height: 25upx;
+		padding-left: 15upx;
+		padding-right: 15upx;
 	}
 </style>

@@ -34,6 +34,11 @@
 		{
 			"path": "pages/tabbar-3-detial/tabbar-3-qa/tabbar-3-qa",
 			"style": {}
+		},
+		{
+			"path":"pages/login/login",
+			"style":{}
+			
 		}
 	],
 	"globalStyle": {
@@ -44,9 +49,9 @@
 	},
 	"tabBar": {
 		"borderStyle": "black",
-		"backgroundColor": "#333",
+		"backgroundColor": "#FFFFFF",
 		"color": "#8F8F94",
-		"selectedColor": "#f33e54",
+		"selectedColor": "#4CD964",
 		"list": [{
 				"pagePath": "pages/tabbar/homepage/homepage",
 				"iconPath": "static/img/tabbar/home.png",
@@ -82,8 +87,8 @@
 			},
 			{
 				"pagePath": "pages/tabbar/myinfo/myinfo",
-				"iconPath": "static/img/tabbar/me.png",
-				"selectedIconPath": "static/img/tabbar/meactive.png",
+				"iconPath": "static/img/tabbar/myinfo.png",
+				"selectedIconPath": "static/img/tabbar/myinfo_active.png",
 				"text": "我的"
 			}
 		]
