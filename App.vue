@@ -15,7 +15,6 @@ global.isLogin=function(){
 export default {
 	onLaunch: function() {
 		console.log('App Launch');
-
 		setTimeout(() => {
 			uni.setTabBarBadge({
 				index: 1,
