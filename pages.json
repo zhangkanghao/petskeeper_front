@@ -39,8 +39,18 @@
 			"path":"pages/login/login",
 			"style":{}
 			
+		},
+		{
+			"path":"pages/login/register",
+			"style":{}
+			
+		},
+		{
+			"path":"pages/login/forget",
+			"style":{}
+			
 		}
-	],
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
