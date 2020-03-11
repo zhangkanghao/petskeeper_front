@@ -44,43 +44,51 @@
 			
 		<view class="iconCon">
 			<view>
-				<image class="icon-xiezuo icon_comment" src="../../../static/img/tabbar-option/release.png"></image>
-				<view>文章</view>
+				<view class="icon-post icon_comment">
+					<image class="icon_comment_plus" src="../../../static/img/myinfo/post.png"></image>
+				</view>
+				<view>我的发布</view>
 			</view>
 			<view>
-				<image class="icon-xiezuo icon_comment" src="../../../static/img/tabbar-option/qa.png"></image>
-				<view>图片</view>
+				<view class="icon-collect icon_comment">
+					<image class="icon_comment_plus" src="../../../static/img/myinfo/collect.png"></image>
+				</view>
+				<view>我的收藏</view>
 			</view>
 			<view>
-				<image class="icon-xiezuo icon_comment" src="../../../static/img/tabbar-option/release.png"></image>
-				<view>音乐</view>
+				<view class="icon-draft icon_comment">
+					<image class="icon_comment_plus" src="../../../static/img/myinfo/draft.png"></image>
+				</view>
+				<view>草稿箱</view>
 			</view>
 			<view>
-				<image class="icon-xiezuo icon_comment" src="../../../static/img/tabbar-option/video.png"></image>
-				<view>视频</view>
+				<image class="icon-pet icon_comment" src="../../../static/img/myinfo/pet.png"></image>
+				<view>我的宠物</view>
 			</view>
 		</view>
 		
 		<view class="ui-table">
-			<view class="ui-table-cell">
-				<image class="icon_comment" src=""></image>
-				<view>收藏</view>
-			</view>
 			<view>
-				<image class="icon_comment" src=""></image>
+				<image class="icon_small" src="../../../static/img/myinfo/hudong.png"></image>
 				<view>互动</view>
 			</view>
 			<view>
-				<image class="icon_comment" src=""></image>
-				<view>偶遇</view>
+				<image class="icon_small" src="../../../static/img/myinfo/fankui.png"></image>
+				<view>反馈</view>
 			</view>
 			<view>
-				<image class="icon_comment" src=""></image>
+				<image class="icon_small" src="../../../static/img/myinfo/fenxiang.png"></image>
+				<view>分享</view>
+			</view>
+		</view>
+		<view class="ui-table">
+			<view>
+				<image class="icon_small" src="../../../static/img/myinfo/shezhi.png"></image>
 				<view>设置</view>
 			</view>
 			<view>
-				<image class="icon_comment" src=""></image>
-				<view>关于</view>
+				<image class="icon_small" src="../../../static/img/myinfo/about.png"></image>
+				<view>关于我们</view>
 			</view>
 		</view>
 	</view>
@@ -216,7 +224,7 @@
 		float: left;
 		overflow: hidden;
 		margin-top: 16px;
-		padding: 32px 0;
+		padding: 20px 0;
 	}
 	.iconCon>view{
 		float: left;
@@ -240,30 +248,47 @@
 	.ui-table>view>view{
 		float: left;
 	}
-	.ui-table>view>i{
-		float: right;
+	.ui-table>view>image{
+		float: left;
 	}
-	
-	.icon_comment{
-		border-radius: 100px;
+	.icon_small{
+		border-radius: 10px;
 		font-size: 20px;
-		width: 30px;
-		height: 30px;
+		width: 40upx;
+		height: 40upx;
+		margin-top: 30upx;
+		margin-right: 20upx;
 		display: inline-block;
 		line-height: 30px;
 		color: #FFFFFF;
 	}
+	.icon_comment{
+		border-radius: 10px;
+		font-size: 20px;
+		width: 40px;
+		height: 40px;
+		display: inline-block;
+		line-height: 30px;
+		color: #FFFFFF;
+	}
+	.icon_comment_plus{
+		width: 30px;
+		height: 30px;
+		margin: 5px auto;
+		display: inline-block;
+		line-height: 30px;
+	}
 	
-	.icon-xiezuo{
-		background-color: #fbdc58;
+	.icon-post{
+		background-color: #ffcc01;
 	}
-	.icon-tupian{
-		background-color: #94ede2;
+	.icon-collect{
+		background-color: #ff3434;
 	}
-	.icon-yinyue{
-		background-color: #bceccd;
+	.icon-draft{
+		background-color: #6200b8;
 	}
-	.icon-shipin{
-		background-color: #ffbadc;
+	.icon-pet{
+		background-color: #5555ff;
 	}
 </style>
