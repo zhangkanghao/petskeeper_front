@@ -13,7 +13,7 @@ export default {
 	},
 	onLoad() {
 		var res=global.isLogin();
-		if(!res){
+		/*if(!res){
 			console.log(res);
 			uni.showModal({
 				title:'提醒',
@@ -24,7 +24,7 @@ export default {
 					})
 				}
 			})
-		}
+		}*/
 	},
 	methods: {}
 };
