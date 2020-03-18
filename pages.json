@@ -8,7 +8,9 @@
 		},
 		{
 			"path": "pages/tabbar/homepage/homepage",
-			"style": {}
+			"style": {
+				"navigationBarTextStyle":"black"
+			}
 		},
 		{
 			"path": "pages/tabbar/classify/classify",

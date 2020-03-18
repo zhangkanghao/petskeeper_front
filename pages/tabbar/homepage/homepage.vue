@@ -20,12 +20,24 @@
 				</view>
 			</uni-nav-bar>
 		</view>
-		<view id="scroll" class="scrollView">
-			<scroll-view class="scroll-view_H" scroll-x="true" @scroll="scroll" scroll-left="120">
-				<view id="demo1" class="scroll-view-item_H">A</view>
-				<view id="demo2" class="scroll-view-item_H">B</view>
-				<view id="demo3" class="scroll-view-item_H">C</view>
-			</scroll-view>
+		<view id="swiper" class="swiperView">
+			<swiper :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000" circular="true">
+				<swiper-item>
+					<view class="swiper-item">
+						<image src="../../../static/img/homepage/item1.png" mode="scaleToFill"></image>
+					</view>
+				</swiper-item>
+				<swiper-item>
+					<view class="swiper-item">
+						<image src="../../../static/img/homepage/item2.png" mode="scaleToFill"></image>
+					</view>
+				</swiper-item>
+				<swiper-item>
+					<view class="swiper-item">
+						<image src="../../../static/img/homepage/item3.png" mode="scaleToFill"></image>
+					</view>
+				</swiper-item>
+			</swiper>
 		</view>
 		<view id="waterfull" class="waterfall">
 
@@ -44,7 +56,11 @@
 		data() {
 			return {
 				title: 'Hello',
-				city: '北京'
+				city: '北京',
+				scrollTop: 0,
+				old: {
+					scrollTop: 0
+				},
 			};
 		},
 
@@ -64,16 +80,17 @@
 				uni.showToast({
 					title: '搜索'
 				})
-			},
-			scroll: function(e) {
-				console.log(e)
-				this.old.scrollTop = e.detail.scrollTop
-			},
+			}
 		}
 	};
 </script>
 
 <style>
+	.content {
+		text-align: center;
+		height: 100%;
+	}
+
 	.status_bar {
 		height: var(--status-bar-height);
 		width: 100%;
@@ -146,25 +163,21 @@
 		text-align: left;
 	}
 
-
-	.content {
-		text-align: center;
-		height: 100%;
-	}
-
-	.scrollView {
+	.swiperView {
 		width: 100%;
 		height: 280upx;
 		background-color: #FFCC01;
 	}
-	.scroll-view_H{
+
+	.swiper-item{
 		width: 100%;
-		height: 100%;
-		display: flex;
+		height: 280upx;
 	}
-	.scroll-view-item_H{
-		
+	.swiper-item>image{
+		width: 100%;
+		height: 280upx;
 	}
+
 	.waterfall {
 		height: 470upx;
 		width: 100%;
