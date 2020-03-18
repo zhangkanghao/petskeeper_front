@@ -40,7 +40,7 @@
 			</swiper>
 		</view>
 		<view id="waterfull" class="waterfall">
-
+			<waterfall :list="list"></waterfall>
 		</view>
 	</view>
 </template>
@@ -48,10 +48,12 @@
 <script>
 	import uniIcons from '@/components/uni-icons/uni-icons.vue'
 	import uniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue"
+	import waterfall from '@/components/xi-waterfall/xi-waterfall.vue'
 	export default {
 		components: {
 			uniIcons,
-			uniNavBar
+			uniNavBar,
+			waterfall
 		},
 		data() {
 			return {
@@ -61,9 +63,75 @@
 				old: {
 					scrollTop: 0
 				},
+				list: [],
+				data: [
+					{
+						title: '标题1',
+						img: 'https://s2.ax1x.com/2020/02/28/3Dn6c8.png'
+					},
+					{
+						title: '标题2',
+						img: 'https://s2.ax1x.com/2020/02/28/3DntXD.jpg'
+					},
+					{
+						title: '标题3',
+						img: 'https://s2.ax1x.com/2020/02/28/3Dna0H.jpg'
+					},
+					{
+						title: '标题4',
+						img: 'https://s2.ax1x.com/2020/02/28/3Dn0AA.jpg'
+					},
+					{
+						title: '标题5',
+						img: 'https://s2.ax1x.com/2020/02/28/3DnRBQ.jpg'
+					},
+					{
+						title: '标题6',
+						img: 'https://s2.ax1x.com/2020/02/28/3Dns9P.jpg'
+					},
+					{
+						title: '标题7',
+						img: 'https://s2.ax1x.com/2020/02/28/3DncjS.jpg'
+					},
+					{
+						title: '标题8',
+						img: 'https://s2.ax1x.com/2020/02/28/3Dn2ng.jpg'
+					},
+					{
+						title: '标题2',
+						img: 'https://s2.ax1x.com/2020/02/28/3DntXD.jpg'
+					},
+					{
+						title: '标题3',
+						img: 'https://s2.ax1x.com/2020/02/28/3Dna0H.jpg'
+					},
+					{
+						title: '标题4',
+						img: 'https://s2.ax1x.com/2020/02/28/3Dn0AA.jpg'
+					},
+					{
+						title: '标题5',
+						img: 'https://s2.ax1x.com/2020/02/28/3DnRBQ.jpg'
+					},
+					{
+						title: '标题6',
+						img: 'https://s2.ax1x.com/2020/02/28/3Dns9P.jpg'
+					},
+					{
+						title: '标题7',
+						img: 'https://s2.ax1x.com/2020/02/28/3DncjS.jpg'
+					},
+					{
+						title: '标题8',
+						img: 'https://s2.ax1x.com/2020/02/28/3Dn2ng.jpg'
+					}
+				]
 			};
 		},
 
+		onShow() {
+			this.list = this.list.concat(this.data);
+		},
 		methods: {
 			showCity() {
 
@@ -179,9 +247,8 @@
 	}
 
 	.waterfall {
-		height: 470upx;
+		height: auto;
 		width: 100%;
 		margin: 5upx auto;
-		background-color: #007AFF;
 	}
 </style>
