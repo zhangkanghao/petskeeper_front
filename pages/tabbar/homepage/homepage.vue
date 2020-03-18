@@ -39,7 +39,9 @@
 				</swiper-item>
 			</swiper>
 		</view>
-		<scroll-view scroll-y="true" enable-back-to-top="true" refresher-enabled="true">
+		<scroll-view scroll-y="true" enable-back-to-top="true" refresher-enabled="true" :refresher-triggered="triggered"
+		 :refresher-threshold="45" refresher-background="#eee" @refresherpulling="onPulling" @refresherrefresh="onRefresh"
+		 @refresherrestore="onRestore" @refresherabort="onAbort">
 			<view id="waterfull" class="waterfall">
 				<waterfall :list="list"></waterfall>
 			</view>
@@ -64,6 +66,7 @@
 				title: 'Hello',
 				city: '北京',
 				scrollTop: 0,
+				triggered: false,
 				old: {
 					scrollTop: 0
 				},
@@ -241,9 +244,10 @@
 		},
 		onLoad() {
 			_self = this;
-			setTimeout(function() {
-				_self.list = _self.list.concat(_self.data);
-			}, 100)
+			this._freshing = false;
+			setTimeout(() => {
+				this.triggered = true;
+			}, 500);
 		},
 		methods: {
 			showCity() {
@@ -260,6 +264,31 @@
 				uni.showToast({
 					title: '搜索'
 				})
+			},
+			onPulling(e) {
+				console.log("onpulling", e);
+			},
+			onRefresh() {
+				if (this._freshing) {
+					uni.showToast({
+						title:'请勿重复刷新',
+						icon:'loading'
+					})
+					return;
+				}
+				this._freshing = true;
+				setTimeout(() => {
+					this.triggered = false;
+					this._freshing = false;
+					_self.list = _self.list.concat(_self.data);
+				}, 1000)
+			},
+			onRestore() {
+				this.triggered = 'restore'; // 需要重置
+				console.log("onRestore");
+			},
+			onAbort() {
+				console.log("onAbort");
 			},
 			insertData() {
 				this.list = this.list.concat(this.data);
@@ -361,6 +390,10 @@
 	.swiper-item>image {
 		width: 100%;
 		height: 280upx;
+	}
+	
+	scroll-view{
+		margin-top: 10upx;
 	}
 
 	.waterfall {
