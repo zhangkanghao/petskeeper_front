@@ -8,9 +8,7 @@
 		},
 		{
 			"path": "pages/tabbar/homepage/homepage",
-			"style": {
-				"navigationBarTitleText": "铲屎官APP"
-			}
+			"style": {}
 		},
 		{
 			"path": "pages/tabbar/classify/classify",
@@ -26,7 +24,10 @@
 		},
 		{
 			"path": "pages/tabbar/myinfo/myinfo",
-			"style": {}
+			"style": {
+				"navigationBarTextStyle":"white"
+			}
+			
 		},
 		{
 			"path": "pages/tabbar-3-detial/tabbar-3-release/tabbar-3-release",
@@ -52,10 +53,10 @@
 		}
     ],
 	"globalStyle": {
-		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "uni-app",
+		"navigationStyle":"custom",
 		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8"
+		"backgroundColor": "#F8F8F8",
+		"enablePullDownRefresh":true
 	},
 	"tabBar": {
 		"borderStyle": "black",

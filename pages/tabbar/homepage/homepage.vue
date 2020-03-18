@@ -1,27 +1,49 @@
 <template>
 	<view class="content">
+		<!-- #ifdef APP-PLUS -->
+		<view class="status_bar">
+			<view class="top_view"></view>
+		</view>
+		<!-- #endif -->
+		<uni-nav-bar backgroundColor="#007AFF" color="#f8f8f8" right-text="注销" title="个人中心" ></uni-nav-bar>
 		页面 - 1
 	</view>
 </template>
 
 <script>
-export default {
-	data() {
-		return {
-			title: 'Hello'
-		};
-	},
-	onLoad() {
-		
-	},
-	methods: {}
-};
+	import uniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue"
+	export default {
+		components: {
+			uniNavBar
+		},
+		data() {
+			return {
+				title: 'Hello'
+			};
+		},
+
+		methods: {}
+	};
 </script>
 
 <style>
-.content {
-	text-align: center;
-	height: 400upx;
-	margin-top: 200upx;
-}
+	.status_bar {
+		height: var(--status-bar-height);
+		width: 100%;
+		background-color: #007AFF;
+	}
+
+	.top_view {
+		height: var(--status-bar-height);
+		width: 100%;
+		position: fixed;
+		background-color: #007AFF;
+		top: 0;
+		z-index: 999;
+	}
+
+	.content {
+		text-align: center;
+		height: 100%;
+	}
 </style>

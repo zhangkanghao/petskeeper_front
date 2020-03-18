@@ -1,5 +1,11 @@
 <template>
 	<view class="content">
+		<!-- #ifdef APP-PLUS -->  
+		<view class="status_bar">  
+		    <view class="top_view"></view>  
+		</view>  
+		<!-- #endif -->
+		<uni-nav-bar backgroundColor="#007AFF" color="#f8f8f8"  right-text="注销" title="个人中心" @clickRight="logout"></uni-nav-bar>
 		<view class="header"></view>	
 		<view class="info">
 			<image src="../../../static/img/extra/user.png"></image>
@@ -72,19 +78,47 @@
 </template>
 
 <script>
+	import uniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue"
 	export default {
+		components: {uniNavBar},
 		data() {
 			return {
 				title:'Hello'
 			}
 		},
 		methods: {
-
+			logout(){
+				uni.removeStorage({
+					key:'setUserData',
+					success() {
+						uni.showToast({
+							title:'注销成功'
+						})
+						uni.reLaunch({
+							url:'../../login/login'
+						})
+					}
+				})
+				
+			}
 		}
 	}
 </script>
 
 <style>
+	.status_bar {  
+	    height: var(--status-bar-height);  
+	    width: 100%;  
+	    background-color: #007AFF;  
+	}  
+	.top_view {  
+	    height: var(--status-bar-height);  
+	    width: 100%;  
+	    position: fixed;  
+	    background-color: #007AFF;  
+	    top: 0;  
+	    z-index: 999;  
+	}
 	.content {
 		text-align: center;
 		height: 100%;
@@ -99,7 +133,7 @@
 		background-color: #007AFF;
 		width: 100%;
 		overflow: hidden;
-		height: 250upx;
+		height: 200upx;
 	}
 	.topView{
 		/* 放我的和关机图标 */
