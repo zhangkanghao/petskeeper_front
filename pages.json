@@ -16,8 +16,13 @@
 			}
 		},
 		{
-			"path": "pages/tabbar/classify/classify",
-			"style": {}
+			"path": "pages/tabbar/follow/follow",
+			"style": {
+				"navigationBarTextStyle":"black",
+				"app-plus":{
+					"scrollIndicator":"none"
+				}
+			}
 		},
 		{
 			"path": "pages/tabbar/option/option",
@@ -74,7 +79,7 @@
 				"text": "首页"
 			},
 			{
-				"pagePath": "pages/tabbar/classify/classify",
+				"pagePath": "pages/tabbar/follow/follow",
 				"iconPath": "static/img/tabbar/follow.png",
 				"selectedIconPath": "static/img/tabbar/followactive.png",
 				"text": "关注"

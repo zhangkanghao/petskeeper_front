@@ -6,38 +6,7 @@
 		</view>
 		<!-- #endif -->
 		<view class="example-body">
-			<uni-nav-bar :fixed="true" color="#333333" background-color="#FFFFFF" right-icon="scan" @clickLeft="showCity"
-			 @clickRight="scan">
-				<block slot="left">
-					<view class="city">
-						<view><text class="uni-nav-bar-text">{{ city }}</text></view>
-						<uni-icons type="arrowdown" color="#333333" size="22" />
-					</view>
-				</block>
-				<view class="input-view">
-					<uni-icons class="input-uni-icon" type="search" size="22" color="#666666" />
-					<input confirm-type="search" class="nav-bar-input" type="text" placeholder="输入搜索关键词" @confirm="confirm">
-				</view>
-			</uni-nav-bar>
-		</view>
-		<view id="swiper" class="swiperView">
-			<swiper :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000" circular="true">
-				<swiper-item>
-					<view class="swiper-item">
-						<image src="../../../static/img/homepage/item1.png" mode="scaleToFill"></image>
-					</view>
-				</swiper-item>
-				<swiper-item>
-					<view class="swiper-item">
-						<image src="../../../static/img/homepage/item2.png" mode="scaleToFill"></image>
-					</view>
-				</swiper-item>
-				<swiper-item>
-					<view class="swiper-item">
-						<image src="../../../static/img/homepage/item3.png" mode="scaleToFill"></image>
-					</view>
-				</swiper-item>
-			</swiper>
+			<uni-nav-bar :fixed="true" color="#333333" background-color="#FFFFFF" title="关注"></uni-nav-bar>
 		</view>
 		<scroll-view scroll-y="true" enable-back-to-top="true" show-scrollbar="false" refresher-enabled="true" :refresher-triggered="triggered"
 		 :refresher-threshold="45" refresher-background="#eee" @refresherpulling="onPulling" @refresherrefresh="onRefresh"
@@ -277,28 +246,12 @@
 		background-color: #f8f8f8;
 		text-align: left;
 	}
-
-	.swiperView {
-		width: 100%;
-		height: 280upx;
-		background-color: #FFCC01;
-	}
-
-	.swiper-item {
-		width: 100%;
-		height: 280upx;
-	}
-
-	.swiper-item>image {
-		width: 100%;
-		height: 280upx;
-	}
 	
 	scroll-view{}
 
 	.waterfall {
 		height: auto;
 		width: 100%;
-		margin: 5upx auto;
+		margin: 10upx auto;
 	}
 </style>
