@@ -82,7 +82,6 @@
 					if (value) {
 						//有登录信息
 						console.log("已登录用户：",value);
-						uni.setStorageSync(value);
 						uni.reLaunch({
 							url: '../tabbar/homepage/homepage',
 						});

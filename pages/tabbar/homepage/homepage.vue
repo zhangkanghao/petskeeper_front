@@ -6,7 +6,7 @@
 		</view>
 		<!-- #endif -->
 		<view class="example-body">
-			<uni-nav-bar :fixed="false" color="#333333" background-color="#FFFFFF" right-icon="scan" @clickLeft="showCity"
+			<uni-nav-bar :fixed="true" color="#333333" background-color="#FFFFFF" right-icon="scan" @clickLeft="showCity"
 			 @clickRight="scan">
 				<block slot="left">
 					<view class="city">
@@ -39,13 +39,17 @@
 				</swiper-item>
 			</swiper>
 		</view>
-		<view id="waterfull" class="waterfall">
-			<waterfall :list="list"></waterfall>
-		</view>
+		<scroll-view scroll-y="true" enable-back-to-top="true" refresher-enabled="true">
+			<view id="waterfull" class="waterfall">
+				<waterfall :list="list"></waterfall>
+			</view>
+		</scroll-view>
+		
 	</view>
 </template>
 
 <script>
+	var _self;
 	import uniIcons from '@/components/uni-icons/uni-icons.vue'
 	import uniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue"
 	import waterfall from '@/components/xi-waterfall/xi-waterfall.vue'
@@ -128,9 +132,16 @@
 				]
 			};
 		},
-
+		onLoad() {
+			console.log(this.list);
+			_self=this;
+		},
 		onShow() {
-			this.list = this.list.concat(this.data);
+			console.log('home show');
+			setTimeout(function(){
+				_self.list=_self.list.concat(_self.data);
+				console.log(_self.list);
+			},100)
 		},
 		methods: {
 			showCity() {
@@ -148,6 +159,9 @@
 				uni.showToast({
 					title: '搜索'
 				})
+			},
+			insertData() {
+				this.list = this.list.concat(this.data);
 			}
 		}
 	};
