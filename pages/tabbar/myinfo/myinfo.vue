@@ -1,76 +1,76 @@
 <template>
-	<view class="content">
+	<view class="content1">
 		<!-- #ifdef APP-PLUS -->  
-		<view class="status_bar">  
-		    <view class="top_view"></view>  
+		<view class="status_bar1">  
+		    <view class="top_view1"></view>  
 		</view>  
 		<!-- #endif -->
 		<uni-nav-bar backgroundColor="#007AFF" color="#f8f8f8"  right-text="注销" title="个人中心" @clickRight="logout"></uni-nav-bar>
-		<view class="header"></view>	
-		<view class="info">
+		<view class="header1"></view>	
+		<view class="info1">
 			<image src="../../../static/img/extra/user.png"></image>
-			<view class="info_name">NICKNAME</view>
-			<view class="info_text">我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介</view>
-			<view class="info_item">
+			<view class="info_name1">NICKNAME</view>
+			<view class="info_text1">我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介</view>
+			<view class="info_item1">
 				<view>16</view>
 				<view>关注</view>
 			</view>
-			<view class="info_item">
+			<view class="info_item1">
 				<view>32</view>
 				<view>粉丝</view>
 			</view>
-			<view class="info_item">
+			<view class="info_item1">
 				<view>3</view>
 				<view>动态</view>
 			</view>
 		</view>
 			
-		<view class="iconCon">
+		<view class="iconCon1">
 			<view>
-				<view class="icon-post icon_comment">
-					<image class="icon_comment_plus" src="../../../static/img/myinfo/post.png"></image>
+				<view class="icon-post1 icon_comment1">
+					<image class="icon_comment_plus1" src="../../../static/img/myinfo/post.png"></image>
 				</view>
 				<view>我的发布</view>
 			</view>
 			<view>
-				<view class="icon-collect icon_comment">
-					<image class="icon_comment_plus" src="../../../static/img/myinfo/collect.png"></image>
+				<view class="icon-collect1 icon_comment1">
+					<image class="icon_comment_plus1" src="../../../static/img/myinfo/collect.png"></image>
 				</view>
 				<view>我的收藏</view>
 			</view>
 			<view>
-				<view class="icon-draft icon_comment">
-					<image class="icon_comment_plus" src="../../../static/img/myinfo/draft.png"></image>
+				<view class="icon-draft1 icon_comment1">
+					<image class="icon_comment_plus1" src="../../../static/img/myinfo/draft.png"></image>
 				</view>
 				<view>草稿箱</view>
 			</view>
 			<view>
-				<image class="icon-pet icon_comment" src="../../../static/img/myinfo/pet.png"></image>
+				<image class="icon-pet1 icon_comment1" src="../../../static/img/myinfo/pet.png"></image>
 				<view>我的宠物</view>
 			</view>
 		</view>
 		
-		<view class="ui-table">
+		<view class="ui-table1">
 			<view>
-				<image class="icon_small" src="../../../static/img/myinfo/hudong.png"></image>
+				<image class="icon_small1" src="../../../static/img/myinfo/hudong.png"></image>
 				<view>互动</view>
 			</view>
 			<view>
-				<image class="icon_small" src="../../../static/img/myinfo/fankui.png"></image>
+				<image class="icon_small1" src="../../../static/img/myinfo/fankui.png"></image>
 				<view>反馈</view>
 			</view>
 			<view>
-				<image class="icon_small" src="../../../static/img/myinfo/fenxiang.png"></image>
+				<image class="icon_small1" src="../../../static/img/myinfo/fenxiang.png"></image>
 				<view>分享</view>
 			</view>
 		</view>
-		<view class="ui-table">
+		<view class="ui-table1">
 			<view>
-				<image class="icon_small" src="../../../static/img/myinfo/shezhi.png"></image>
+				<image class="icon_small1" src="../../../static/img/myinfo/shezhi.png"></image>
 				<view>设置</view>
 			</view>
 			<view>
-				<image class="icon_small" src="../../../static/img/myinfo/about.png"></image>
+				<image class="icon_small1" src="../../../static/img/myinfo/about.png"></image>
 				<view>关于我们</view>
 			</view>
 		</view>
@@ -106,12 +106,12 @@
 </script>
 
 <style>
-	.status_bar {  
+	.status_bar1 {  
 	    height: var(--status-bar-height);  
 	    width: 100%;  
 	    background-color: #007AFF;  
 	}  
-	.top_view {  
+	.top_view1 {  
 	    height: var(--status-bar-height);  
 	    width: 100%;  
 	    position: fixed;  
@@ -119,7 +119,7 @@
 	    top: 0;  
 	    z-index: 999;  
 	}
-	.content {
+	.content1 {
 		text-align: center;
 		height: 100%;
 	}
@@ -128,19 +128,19 @@
 		padding: 0;
 		font-family: "微软雅黑";
 	}
-	.header{
+	.header1{
 		/* 头部包含背景图 */
 		background-color: #007AFF;
 		width: 100%;
 		overflow: hidden;
 		height: 200upx;
 	}
-	.topView{
+	.topView1{
 		/* 放我的和关机图标 */
 		height: 50px;
 		line-height: 50px;
 	}
-	.topView>view{
+	.topView1>view{
 		color: #FFFFFF;
 		display: inline-block;
 		float: left;
@@ -148,7 +148,7 @@
 		font-size: 18px;
 		font-weight: bold;
 	}
-	.topView>image{
+	.topView1>image{
 		display: inline-block;
 		float: right;
 		padding-top: 32upx;
@@ -158,7 +158,7 @@
 	}
 	
 	
-	.info{
+	.info1{
 		/* 存放个人信息的 */
 		width: calc( 100% - 32px );
 		background-color: #FFFFFF;
@@ -168,7 +168,7 @@
 		border-radius: 8px;
 		box-shadow: 0 0 6px rgba(0,122,255,0.6);
 	}
-	.info>image{
+	.info1>image{
 		width: 66px;
 		height: 66px;
 		border-radius: 66px;
@@ -177,14 +177,14 @@
 		margin-top: -33px;
 		border: 1px solid #007AFF;
 	}
-	.info_name{
+	.info_name1{
 		text-align: center;
 		font-size: 16px;
 		color: #444444;
 		height: 30px;
 		line-height: 30px;
 	}
-	.info_text{
+	.info_text1{
 		text-align: center;
 		width: 80%;
 		margin:0 auto;
@@ -196,61 +196,62 @@
 		text-overflow: ellipsis;
 		white-space: nowrap;
 	}
-	.info_item{
+	.info_item1{
 		width: calc( 100% / 3 );
 		float: left;
 		text-align: center;
 		padding: 4px 0;
 	}
-	.info_item>view:nth-of-type(1){
+	.info_item1>view:nth-of-type(1){
 		font-size: 12px;
 	}
-	.info_item>view:nth-of-type(2){
+	.info_item1>view:nth-of-type(2){
 		font-size: 14px;
 		color: #6F6F6F;
 	}
-	.info_item:nth-of-type(1){
+	.info_item1:nth-of-type(1){
 		border-radius: 0 0 0 8px;
 	}
-	.info_item:nth-last-of-type(1){
+	.info_item1:nth-last-of-type(1){
 		border-radius: 0 0 8px 0;
 	}
 	
-	.iconCon{
+	.iconCon1{
 		/* 放功能的图标 */
 		width: 100%;
 		float: left;
 		overflow: hidden;
 		margin-top: 16px;
 		padding: 20px 0;
+		background-color: #ffffff;
 	}
-	.iconCon>view{
+	.iconCon1>view{
 		float: left;
 		width: calc( 100% / 4 );
 		text-align: center;
 		font-size: 30upx;
 	}
 	
-	.ui-table{
+	.ui-table1{
 		float: left;
-		width: calc( 100% - 64px );
+		width: 100%;
 		background-color: #FFFFFF;
 		border-top: 8px solid #EFEFF4;
 		padding: 0 32px;
 		font-size: 30upx;
 	}
-	.ui-table>view{
+	.ui-table1>view{
 		height: 50px;
 		line-height: 50px;
 		border-bottom: 1px solid #EFEFF4;
 	}
-	.ui-table>view>view{
+	.ui-table1>view>view{
 		float: left;
 	}
-	.ui-table>view>image{
+	.ui-table1>view>image{
 		float: left;
 	}
-	.icon_small{
+	.icon_small1{
 		border-radius: 10px;
 		font-size: 20px;
 		width: 40upx;
@@ -261,7 +262,7 @@
 		line-height: 30px;
 		color: #FFFFFF;
 	}
-	.icon_comment{
+	.icon_comment1{
 		border-radius: 10px;
 		font-size: 20px;
 		width: 40px;
@@ -270,7 +271,7 @@
 		line-height: 30px;
 		color: #FFFFFF;
 	}
-	.icon_comment_plus{
+	.icon_comment_plus1{
 		width: 30px;
 		height: 30px;
 		margin: 5px auto;
@@ -278,16 +279,16 @@
 		line-height: 30px;
 	}
 	
-	.icon-post{
+	.icon-post1{
 		background-color: #ffcc01;
 	}
-	.icon-collect{
+	.icon-collect1{
 		background-color: #ff3434;
 	}
-	.icon-draft{
+	.icon-draft1{
 		background-color: #6200b8;
 	}
-	.icon-pet{
+	.icon-pet1{
 		background-color: #5555ff;
 	}
 </style>
