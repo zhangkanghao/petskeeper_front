@@ -70,24 +70,26 @@
 		},
 		mounted() {
 			_this= this;
-			//this.isLogin();
+			this.isLogin();
 		},
 		methods: {
 			isLogin(){
+				console.log("islogin");
 				//判断缓存中是否登录过，直接登录
-				// try {
-				// 	const value = uni.getStorageSync('setUserData');
-				// 	if (value) {
-				// 		//有登录信息
-				// 		console.log("已登录用户：",value);
-				// 		_this.$store.dispatch("setUserData",value); //存入状态
-				// 		uni.reLaunch({
-				// 			url: '../../../pages/index',
-				// 		});
-				// 	}
-				// } catch (e) {
-				// 	// error
-				// }
+				try {
+					const value = uni.getStorageSync('setUserData');
+					console.log(value);
+					if (value) {
+						//有登录信息
+						console.log("已登录用户：",value);
+						uni.setStorageSync(value);
+						uni.reLaunch({
+							url: '../tabbar/homepage/homepage',
+						});
+					}
+				} catch (e) {
+					console.log(e);
+				}
 			},
 		    startLogin(){
 				//登录
@@ -113,7 +115,9 @@
 		        }
 				
 				console.log("登录成功")
-				
+				uni.reLaunch({
+					url:"../tabbar/homepage/homepage"
+				})
 				_this.isRotate=true
 				setTimeout(function(){
 					_this.isRotate=false

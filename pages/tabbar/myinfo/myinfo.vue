@@ -7,7 +7,7 @@
 			</view>
 		</view>	
 		
-		<view v-if="isLogin" class="info">
+		<view class="info">
 			<image src="../../../static/img/extra/user.png"></image>
 			<view class="info_name">NICKNAME</view>
 			<view class="info_text">我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介</view>
@@ -21,23 +21,6 @@
 			</view>
 			<view class="info_item">
 				<view>3</view>
-				<view>动态</view>
-			</view>
-		</view>
-		<view v-else class="info">
-			<image style="background-color: #fff;" src="../../../static/img/myinfo/annoymous.png"></image>
-			<view class="info_name"><navigator hover-class="navigator-hover" url="../../login/login" style="color: #0055ff;">点此登陆</navigator></view>
-			<view class="info_text">点击上方登录以获取账号信息</view>
-			<view class="info_item">
-				<view>0</view>
-				<view>关注</view>
-			</view>
-			<view class="info_item">
-				<view>0</view>
-				<view>粉丝</view>
-			</view>
-			<view class="info_item">
-				<view>0</view>
 				<view>动态</view>
 			</view>
 		</view>
@@ -98,20 +81,8 @@
 	export default {
 		data() {
 			return {
-				isLogin: false,
+				title:'Hello'
 			}
-		},
-		onLoad() {
-			console.log('myinfo load');
-			var res=global.isLogin();
-			if(res){
-				isLogin=true;
-				console.log(res);
-			}
-		},
-		onShow() {
-			console.log('myinfo show');
-			
 		},
 		methods: {
 
@@ -168,7 +139,7 @@
 		margin-top: -48px;
 		float: left;
 		border-radius: 8px;
-		box-shadow: 0 0 6px rgba(255,218,25,0.6);
+		box-shadow: 0 0 6px rgba(0,122,255,0.8);
 	}
 	.info>image{
 		width: 66px;

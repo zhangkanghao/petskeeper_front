@@ -15,6 +15,10 @@ global.isLogin=function(){
 export default {
 	onLaunch: function() {
 		console.log('App Launch');
+		uni.setStorageSync()()({
+			key:'setUserData',
+			data:'1'
+		})
 		setTimeout(() => {
 			uni.setTabBarBadge({
 				index: 1,

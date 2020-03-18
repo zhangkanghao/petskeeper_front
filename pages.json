@@ -2,9 +2,14 @@
 	"pages": [
 		//pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
+			"path":"pages/login/login",
+			"style":{}
+			
+		},
+		{
 			"path": "pages/tabbar/homepage/homepage",
 			"style": {
-				"navigationBarTitleText": "uni-app"
+				"navigationBarTitleText": "铲屎官APP"
 			}
 		},
 		{
@@ -34,11 +39,6 @@
 		{
 			"path": "pages/tabbar-3-detial/tabbar-3-qa/tabbar-3-qa",
 			"style": {}
-		},
-		{
-			"path":"pages/login/login",
-			"style":{}
-			
 		},
 		{
 			"path":"pages/login/register",
