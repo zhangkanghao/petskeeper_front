@@ -1,12 +1,6 @@
 <template>
 	<view class="content">
-		<view class="header">
-			<view class="topView">
-				<view>我的</view>
-				<image src="../../../static/img/myinfo/logout.png" mode="aspectFit"></image>
-			</view>
-		</view>	
-		
+		<view class="header"></view>	
 		<view class="info">
 			<image src="../../../static/img/extra/user.png"></image>
 			<view class="info_name">NICKNAME</view>
@@ -105,8 +99,7 @@
 		background-color: #007AFF;
 		width: 100%;
 		overflow: hidden;
-		
-		height: 150px;
+		height: 250upx;
 	}
 	.topView{
 		/* 放我的和关机图标 */
@@ -139,7 +132,7 @@
 		margin-top: -48px;
 		float: left;
 		border-radius: 8px;
-		box-shadow: 0 0 6px rgba(0,122,255,0.8);
+		box-shadow: 0 0 6px rgba(0,122,255,0.6);
 	}
 	.info>image{
 		width: 66px;
@@ -201,7 +194,7 @@
 		float: left;
 		width: calc( 100% / 4 );
 		text-align: center;
-		
+		font-size: 30upx;
 	}
 	
 	.ui-table{
@@ -210,6 +203,7 @@
 		background-color: #FFFFFF;
 		border-top: 8px solid #EFEFF4;
 		padding: 0 32px;
+		font-size: 30upx;
 	}
 	.ui-table>view{
 		height: 50px;

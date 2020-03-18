@@ -12,19 +12,7 @@ export default {
 		};
 	},
 	onLoad() {
-		var res=global.isLogin();
-		/*if(!res){
-			console.log(res);
-			uni.showModal({
-				title:'提醒',
-				content:'请先登录',
-				success() {
-					uni.navigateTo({
-						url:'../../login/login'
-					})
-				}
-			})
-		}*/
+		
 	},
 	methods: {}
 };
