@@ -4,7 +4,7 @@
 		<view class="column" id="columnFirst">
 			<view class="water-item" v-for="(item,index) in columnFirst" :key="index">
 				<view>
-					<image class="top-cover" :src="item.img" :onerror="errorImg" mode="widthFix"></image>
+					<image class="top-cover" :src="item.img"  mode="widthFix"></image>
 					<h3 class="top-title">{{item.title}}</h3>
 				</view>
 				<view class="water-bottom">
@@ -15,7 +15,7 @@
 						<text class="water-name">{{item.name}}</text>
 					</view>
 					<view class="water-bottom-item">
-						<image class="bottom-good" :onerror="errorImg" src="/static/icon_good.svg" mode="widthFix"></image>
+						<image class="bottom-good" src="../../static/img/homepage/icon_good.png" mode="widthFix"></image>
 						<text class="water-num">{{item.likeCount}}</text>
 					</view>
 				</view>
@@ -27,7 +27,7 @@
 		<view class="column" id="columnSecond">
 			<view class="water-item" v-for="(item,index) in columnSecond" :key="index">
 				<view>
-					<image class="top-cover" :src="item.img" :onerror="errorImg" mode="widthFix"></image>
+					<image class="top-cover" :src="item.img"  mode="widthFix"></image>
 					<h3 class="top-title">{{item.title}}</h3>
 				</view>
 				<view class="water-bottom">
@@ -38,7 +38,7 @@
 						<text class="water-name">{{item.name}}</text>
 					</view>
 					<view class="water-bottom-item">
-						<image class="bottom-good" :onerror="errorImg" src="/static/icon_good.svg" mode="widthFix"></image>
+						<image class="bottom-good" src="../../static/img/homepage/icon_good.png" mode="widthFix"></image>
 						<text class="water-num">{{item.likeCount}}</text>
 					</view>
 				</view>
@@ -186,6 +186,10 @@
 		color: #333333;
 		text-align: justify;
 		margin: 20upx;
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 2;
+		overflow: hidden;
 	}
 
 	.water-bottom {
@@ -221,7 +225,10 @@
 		white-space: nowrap;
 		text-overflow: ellipsis;
 	}
-
+	.bottom-good {
+			width: 32upx;
+			height: 32upx;
+		}	
 	.water-num {
 		line-height: 32upx;
 		font-size: 24upx;
@@ -229,8 +236,5 @@
 		margin-left: 14upx;
 	}
 
-	.bottom-good {
-		width: 28upx;
-		height: 28upx;
-	}
+	
 </style>

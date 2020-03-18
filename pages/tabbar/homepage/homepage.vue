@@ -39,9 +39,9 @@
 				</swiper-item>
 			</swiper>
 		</view>
-		<scroll-view scroll-y="true" enable-back-to-top="true" refresher-enabled="true" :refresher-triggered="triggered"
+		<scroll-view scroll-y="true" enable-back-to-top="true" show-scrollbar="false" refresher-enabled="true" :refresher-triggered="triggered"
 		 :refresher-threshold="45" refresher-background="#eee" @refresherpulling="onPulling" @refresherrefresh="onRefresh"
-		 @refresherrestore="onRestore" @refresherabort="onAbort">
+		 @refresherrestore="onRestore" @refresherabort="onAbort" @scrolltolower="loadMore">
 			<view id="waterfull" class="waterfall">
 				<waterfall :list="list"></waterfall>
 			</view>
@@ -51,7 +51,7 @@
 </template>
 
 <script>
-	var _self;
+	var _self,page=1;
 	import uniIcons from '@/components/uni-icons/uni-icons.vue'
 	import uniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue"
 	import waterfall from '@/components/xi-waterfall/xi-waterfall.vue'
@@ -111,143 +111,21 @@
 					name: "君倾心",
 					photo: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576173486008&di=68514e7684d0753c5100994fae6456cb&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201612%2F07%2F20161207195613_xuEFP.thumb.700_0.jpeg",
 					title: "众里寻她千百度，蓦然回首，那人却在，灯火阑珊处",
-				}, {
-					img: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576173155133&di=9d77167bfd27f6937ffbccbd3eddb71e&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201601%2F09%2F20160109201510_fucHC.jpeg",
-					id: "1084",
-					isLiked: "0",
-					likeCount: 4,
-					name: "青丝弄瑶玉",
-					photo: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576173620777&di=54b7ee5f59c30503096ccabbe0ed9a8e&imgtype=0&src=http%3A%2F%2Fp.store.itangyuan.com%2Fp%2Fchapter%2Fattachment%2Feg-VEBjtEA%2FEgfWEgMVEgjTe_-W4BEU40u3KhifeUL1HtDvHhsVgU9hK6LqG1opiMO.jpg",
-					title: "死生契阔，与子成说。执子之手，与子偕老",
-				}, {
-					img: "http://img.51rry.com/note/2019-11-28/1574931683000.png",
-					id: "1084",
-					isLiked: "0",
-					likeCount: 520,
-					name: "残城碎梦",
-					photo: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576173486004&di=3ef63a12a8372b81bfe97b81adee093d&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201612%2F07%2F20161207195604_jNSGc.thumb.700_0.jpeg",
-					title: "你知道我曾为你动过情"
-				}, {
-					img: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576173237976&di=4026f6a26b2c370611d6c6877aad1ded&imgtype=0&src=http%3A%2F%2Fdmimg.5054399.com%2Fallimg%2Fqidai%2Fndmzsjbz%2F001.jpg",
-					id: "1084",
-					isLiked: "0",
-					likeCount: 650,
-					name: "梦里南柯",
-					photo: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576173486004&di=3ef63a12a8372b81bfe97b81adee093d&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201612%2F07%2F20161207195604_jNSGc.thumb.700_0.jpeg",
-					title: "我欲与君相知，长命无绝衰。山无陵，江水为竭。东雷震震，夏雨雪。天地合，乃敢与君绝"
-				}, {
-					img: "http://img.51rry.com/note/2019-10-21/1571654591036.png",
-					id: "1084",
-					isLiked: "0",
-					likeCount: 999,
-					name: "无风",
-					photo: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576173620777&di=54b7ee5f59c30503096ccabbe0ed9a8e&imgtype=0&src=http%3A%2F%2Fp.store.itangyuan.com%2Fp%2Fchapter%2Fattachment%2Feg-VEBjtEA%2FEgfWEgMVEgjTe_-W4BEU40u3KhifeUL1HtDvHhsVgU9hK6LqG1opiMO.jpg",
-					title: "晓看天色，暮看云，行也思君，坐也思君",
-				}, {
-					img: "http://pic1.win4000.com/wallpaper/2018-10-31/5bd99d277748e.jpg",
-					id: "1084",
-					isLiked: "0",
-					likeCount: 25,
-					name: "君倾心",
-					photo: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576173486008&di=68514e7684d0753c5100994fae6456cb&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201612%2F07%2F20161207195613_xuEFP.thumb.700_0.jpeg",
-					title: "众里寻她千百度，蓦然回首，那人却在，灯火阑珊处",
-				}, {
-					img: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576173155133&di=9d77167bfd27f6937ffbccbd3eddb71e&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201601%2F09%2F20160109201510_fucHC.jpeg",
-					id: "1084",
-					isLiked: "0",
-					likeCount: 4,
-					name: "青丝弄瑶玉",
-					photo: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576173620777&di=54b7ee5f59c30503096ccabbe0ed9a8e&imgtype=0&src=http%3A%2F%2Fp.store.itangyuan.com%2Fp%2Fchapter%2Fattachment%2Feg-VEBjtEA%2FEgfWEgMVEgjTe_-W4BEU40u3KhifeUL1HtDvHhsVgU9hK6LqG1opiMO.jpg",
-					title: "死生契阔，与子成说。执子之手，与子偕老",
-				}, {
-					img: "http://img.51rry.com/note/2019-11-28/1574931683000.png",
-					id: "1084",
-					isLiked: "0",
-					likeCount: 520,
-					name: "残城碎梦",
-					photo: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576173486004&di=3ef63a12a8372b81bfe97b81adee093d&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201612%2F07%2F20161207195604_jNSGc.thumb.700_0.jpeg",
-					title: "你知道我曾为你动过情"
-				}, {
-					img: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576173237976&di=4026f6a26b2c370611d6c6877aad1ded&imgtype=0&src=http%3A%2F%2Fdmimg.5054399.com%2Fallimg%2Fqidai%2Fndmzsjbz%2F001.jpg",
-					id: "1084",
-					isLiked: "0",
-					likeCount: 650,
-					name: "梦里南柯",
-					photo: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576173486004&di=3ef63a12a8372b81bfe97b81adee093d&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201612%2F07%2F20161207195604_jNSGc.thumb.700_0.jpeg",
-					title: "我欲与君相知，长命无绝衰。山无陵，江水为竭。东雷震震，夏雨雪。天地合，乃敢与君绝"
-				}, {
-					img: "http://img.51rry.com/note/2019-10-21/1571654591036.png",
-					id: "1084",
-					isLiked: "0",
-					likeCount: 999,
-					name: "无风",
-					photo: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576173620777&di=54b7ee5f59c30503096ccabbe0ed9a8e&imgtype=0&src=http%3A%2F%2Fp.store.itangyuan.com%2Fp%2Fchapter%2Fattachment%2Feg-VEBjtEA%2FEgfWEgMVEgjTe_-W4BEU40u3KhifeUL1HtDvHhsVgU9hK6LqG1opiMO.jpg",
-					title: "晓看天色，暮看云，行也思君，坐也思君",
-				}, {
-					img: "http://pic1.win4000.com/wallpaper/2018-10-31/5bd99d277748e.jpg",
-					id: "1084",
-					isLiked: "0",
-					likeCount: 25,
-					name: "君倾心",
-					photo: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576173486008&di=68514e7684d0753c5100994fae6456cb&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201612%2F07%2F20161207195613_xuEFP.thumb.700_0.jpeg",
-					title: "众里寻她千百度，蓦然回首，那人却在，灯火阑珊处",
-				}, {
-					img: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576173155133&di=9d77167bfd27f6937ffbccbd3eddb71e&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201601%2F09%2F20160109201510_fucHC.jpeg",
-					id: "1084",
-					isLiked: "0",
-					likeCount: 4,
-					name: "青丝弄瑶玉",
-					photo: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576173620777&di=54b7ee5f59c30503096ccabbe0ed9a8e&imgtype=0&src=http%3A%2F%2Fp.store.itangyuan.com%2Fp%2Fchapter%2Fattachment%2Feg-VEBjtEA%2FEgfWEgMVEgjTe_-W4BEU40u3KhifeUL1HtDvHhsVgU9hK6LqG1opiMO.jpg",
-					title: "死生契阔，与子成说。执子之手，与子偕老",
-				}, {
-					img: "http://img.51rry.com/note/2019-11-28/1574931683000.png",
-					id: "1084",
-					isLiked: "0",
-					likeCount: 520,
-					name: "残城碎梦",
-					photo: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576173486004&di=3ef63a12a8372b81bfe97b81adee093d&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201612%2F07%2F20161207195604_jNSGc.thumb.700_0.jpeg",
-					title: "你知道我曾为你动过情"
-				}, {
-					img: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576173237976&di=4026f6a26b2c370611d6c6877aad1ded&imgtype=0&src=http%3A%2F%2Fdmimg.5054399.com%2Fallimg%2Fqidai%2Fndmzsjbz%2F001.jpg",
-					id: "1084",
-					isLiked: "0",
-					likeCount: 650,
-					name: "梦里南柯",
-					photo: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576173486004&di=3ef63a12a8372b81bfe97b81adee093d&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201612%2F07%2F20161207195604_jNSGc.thumb.700_0.jpeg",
-					title: "我欲与君相知，长命无绝衰。山无陵，江水为竭。东雷震震，夏雨雪。天地合，乃敢与君绝"
-				}, {
-					img: "http://img.51rry.com/note/2019-10-21/1571654591036.png",
-					id: "1084",
-					isLiked: "0",
-					likeCount: 999,
-					name: "无风",
-					photo: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576173620777&di=54b7ee5f59c30503096ccabbe0ed9a8e&imgtype=0&src=http%3A%2F%2Fp.store.itangyuan.com%2Fp%2Fchapter%2Fattachment%2Feg-VEBjtEA%2FEgfWEgMVEgjTe_-W4BEU40u3KhifeUL1HtDvHhsVgU9hK6LqG1opiMO.jpg",
-					title: "晓看天色，暮看云，行也思君，坐也思君",
-				}, {
-					img: "http://pic1.win4000.com/wallpaper/2018-10-31/5bd99d277748e.jpg",
-					id: "1084",
-					isLiked: "0",
-					likeCount: 25,
-					name: "君倾心",
-					photo: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576173486008&di=68514e7684d0753c5100994fae6456cb&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201612%2F07%2F20161207195613_xuEFP.thumb.700_0.jpeg",
-					title: "众里寻她千百度，蓦然回首，那人却在，灯火阑珊处",
-				}, {
-					img: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576173155133&di=9d77167bfd27f6937ffbccbd3eddb71e&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201601%2F09%2F20160109201510_fucHC.jpeg",
-					id: "1084",
-					isLiked: "0",
-					likeCount: 4,
-					name: "青丝弄瑶玉",
-					photo: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576173620777&di=54b7ee5f59c30503096ccabbe0ed9a8e&imgtype=0&src=http%3A%2F%2Fp.store.itangyuan.com%2Fp%2Fchapter%2Fattachment%2Feg-VEBjtEA%2FEgfWEgMVEgjTe_-W4BEU40u3KhifeUL1HtDvHhsVgU9hK6LqG1opiMO.jpg",
-					title: "死生契阔，与子成说。执子之手，与子偕老",
 				}]
 			};
 		},
 		onLoad() {
+			console.log('home load');
 			_self = this;
 			this._freshing = false;
+			this.triggered =true;
 			setTimeout(() => {
-				this.triggered = true;
-			}, 500);
+				_self.list = _self.list.concat(_self.data);
+			}, 100)
+		},
+		onReachBottom() {
+			console.log(121);
+			this.loadMore();
 		},
 		methods: {
 			showCity() {
@@ -266,7 +144,6 @@
 				})
 			},
 			onPulling(e) {
-				console.log("onpulling", e);
 			},
 			onRefresh() {
 				if (this._freshing) {
@@ -285,13 +162,40 @@
 			},
 			onRestore() {
 				this.triggered = 'restore'; // 需要重置
-				console.log("onRestore");
 			},
 			onAbort() {
-				console.log("onAbort");
+				
 			},
 			insertData() {
 				this.list = this.list.concat(this.data);
+			},
+			initData:function(){
+				page=1;
+				uni.showNavigationBarLoading();
+				uni.redirectTo({
+					url: 'ip/article/query?page='+page,
+					success: res => {
+						uni.hideNavigationBarLoading();
+						page++;
+					},
+					fail: () => {},
+					complete: () => {},
+				});
+				
+			},
+			loadMore:()=>{
+				console.log(1);
+				uni.showNavigationBarLoading();
+				uni.redirectTo({
+					url: 'ip/article/query?page='+page,
+					success: res => {
+						uni.hideNavigationBarLoading();
+						page++;
+					},
+					fail: () => {},
+					complete: () => {}
+				});
+				
 			}
 		}
 	};
@@ -392,9 +296,7 @@
 		height: 280upx;
 	}
 	
-	scroll-view{
-		margin-top: 10upx;
-	}
+	scroll-view{}
 
 	.waterfall {
 		height: auto;

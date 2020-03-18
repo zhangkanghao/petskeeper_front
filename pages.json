@@ -9,7 +9,10 @@
 		{
 			"path": "pages/tabbar/homepage/homepage",
 			"style": {
-				"navigationBarTextStyle":"black"
+				"navigationBarTextStyle":"black",
+				"app-plus":{
+					"scrollIndicator":"none"
+				}
 			}
 		},
 		{
