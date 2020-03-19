@@ -40,7 +40,9 @@ export default {
 		goToPage(url) {
 			if (!url) return;
 			uni.navigateTo({
-				url
+				url:url,
+				animationType:'slide-in-bottom',
+				animationDuration:200,
 			});
 		}
 	}
