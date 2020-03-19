@@ -9,7 +9,6 @@
 		{
 			"path": "pages/tabbar/homepage/homepage",
 			"style": {
-				"navigationBarTextStyle":"black",
 				"app-plus":{
 					"scrollIndicator":"none"
 				}
@@ -18,7 +17,6 @@
 		{
 			"path": "pages/tabbar/follow/follow",
 			"style": {
-				"navigationBarTextStyle":"black",
 				"app-plus":{
 					"scrollIndicator":"none"
 				}
@@ -60,12 +58,17 @@
 			"path":"pages/login/forget",
 			"style":{}
 			
+		},
+		{
+			"path":"pages/detail/release/release",
+			"style":{}
 		}
     ],
 	"globalStyle": {
 		"navigationStyle":"custom",
 		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8"
+		"backgroundColor": "#F8F8F8",
+		"navigationBarTextStyle":"black"
 	},
 	"tabBar": {
 		"borderStyle": "black",
