@@ -6,13 +6,19 @@
 		</view>
 		<!-- #endif -->
 		<view class="example-body">
-			<uni-nav-bar :fixed="true" color="#333333" background-color="#FFFFFF" right-icon="scan" @clickLeft="showCity"
-			 @clickRight="scan">
+			<uni-nav-bar :fixed="true" color="#333333" background-color="#FFFFFF" right-icon="scan" @clickRight="scan">
 				<block slot="left">
-					<view class="city">
-						<view><text class="uni-nav-bar-text">{{ city }}</text></view>
+					<picker class="city" @change="PickerChange" :value="index" :range="picker">
+						<view class="picker">
+							{{index>-1?picker[index]:'全部'}}
+						</view>
 						<uni-icons type="arrowdown" color="#333333" size="22" />
-					</view>
+					</picker>
+					
+					<!-- <view class="city">
+						<view><text class="uni-nav-bar-text">{{ city }}</text></view>
+						
+					</view> -->
 				</block>
 				<view class="input-view">
 					<uni-icons class="input-uni-icon" type="search" size="22" color="#666666" />
@@ -63,7 +69,8 @@
 		},
 		data() {
 			return {
-				title: 'Hello',
+				index: -1,
+				picker: ['北京', '上海', '温州'],
 				city: '北京',
 				scrollTop: 0,
 				triggered: false,
@@ -127,6 +134,9 @@
 			this.loadMore();
 		},
 		methods: {
+			PickerChange(e) {
+				this.index = e.detail.value
+			},
 			showCity() {
 				uni.showToast({
 					title: '选择城市'
