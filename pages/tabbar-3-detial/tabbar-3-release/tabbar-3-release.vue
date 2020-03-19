@@ -44,7 +44,12 @@
 </template>
 
 <script>
+	import uniIcons from '@/components/uni-icons/uni-icons.vue'
+	import uniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue"
 	export default {
+		components:{
+			uniIcons,uniNavBar
+		},
 		data() {
 			return {
 				title: 'Hello',
@@ -153,6 +158,18 @@
 	.content {
 		height: 100%;
 		background-color: #FFFFFF;
+	}
+	.example-body {
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: center;
+		padding: 0;
+		font-size: 14px;
+		background-color: #ffffff;
+	}
+	
+	.uni-nav-bar-text {
+		font-size: 28rpx;
 	}
 	.tatext{
 		text-align: start;

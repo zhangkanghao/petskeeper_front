@@ -29,7 +29,7 @@
 		<view id="swiper" class="swiperView">
 			<swiper :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000" circular="true">
 				<swiper-item>
-					<view class="swiper-item">
+					<view class="swiper-item" @click="toDetail">
 						<image src="../../../static/img/homepage/item1.png" mode="scaleToFill"></image>
 					</view>
 				</swiper-item>
@@ -150,6 +150,11 @@
 			confirm() {
 				uni.showToast({
 					title: '搜索'
+				})
+			},
+			toDetail(){
+				uni.navigateTo({
+					url:'../../detail/release/release'
 				})
 			},
 			onPulling(e) {},
