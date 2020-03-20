@@ -16,7 +16,13 @@ export default {
 	onLaunch: function() {
 		console.log('App Launch');
 		try {
-		    uni.setStorageSync('setUserData', '1');
+		    let userData=uni.getStorageSync('setUserData');
+			if(userData){
+				console.log(userData);
+				uni.switchTab({
+					url:'pages/tabbar/homepage/homepage'
+				})
+			}
 		} catch (e) {
 		    // error
 		}

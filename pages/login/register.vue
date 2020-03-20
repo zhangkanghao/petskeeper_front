@@ -2,6 +2,18 @@
 	<view class="register">
 
 		<view class="content">
+			<!-- #ifdef APP-PLUS -->
+			<view class="status_bar">
+				<view class="top_view"></view>
+			</view>
+			<!-- #endif -->
+			<view class="example-body">
+				<uni-nav-bar :fixed="true" color="#333333" @clickLeft="goback">
+					<block class="cu-item" slot="left">
+						<text class="lg text-black cuIcon-back" style="font-size: 40upx;margin-left: 10upx;"></text>
+					</block>
+				</uni-nav-bar>
+			</view>
 			<!-- 头部logo -->
 			<view class="header">
 				<image :src="logoImage"></image>
@@ -49,6 +61,11 @@
 			_this = this;
 		},
 		methods: {
+			goback(){
+				uni.navigateBack({
+					delta:1
+				})
+			},
 			isShowAgree() {
 				//是否选择协议
 				_this.showAgree = !_this.showAgree;
@@ -131,4 +148,35 @@
 <style>
 	@import url("../../components/watch-login/css/icon.css");
 	@import url("./css/main.css");
+	page{
+		background-color: #FFFFFF;
+	}
+	.content {
+		text-align: center;
+		height: 100%;
+		background-color: #FFFFFF;
+	}
+	.status_bar {
+		height: var(--status-bar-height);
+		width: 100%;
+		background-color: #ffffff;
+	}
+	
+	.top_view {
+		height: var(--status-bar-height);
+		width: 100%;
+		position: fixed;
+		background-color: #ffffff;
+		top: 0;
+		z-index: 999;
+	}
+	
+	.example-body {
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: center;
+		padding: 0;
+		font-size: 14px;
+		background-color: #ffffff;
+	}
 </style>

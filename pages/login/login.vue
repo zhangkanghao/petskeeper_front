@@ -146,6 +146,13 @@
 							}
 							_this.header={'content-type':'application/x-www-form-urlencoded','authorization':res.data.auth};
 							uni.reLaunch({url:'../tabbar/homepage/homepage'});
+						}else{
+							_this.isRotate=false;
+							uni.showToast({
+								icon: 'none',
+								position: 'bottom',
+								title: res.data.msg
+							});
 						}
 						
 					},
