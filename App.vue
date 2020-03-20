@@ -1,17 +1,7 @@
 <script>
-global.isLogin=function(){
-	try{
-		var suid=uni.getStorageSync('suid');
-		var token=uni.getStorageSync('token');
-	}catch{
-		
-	}
-	if(suid==''||token==''){
-		return false;
-	}else {
-		return [suid,token];
-	}
-}
+globalData: {  
+	newInfo: false  
+};
 export default {
 	onLaunch: function() {
 		console.log('App Launch');

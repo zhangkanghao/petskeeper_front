@@ -8,20 +8,20 @@
 		<uni-nav-bar backgroundColor="#007AFF" color="#f8f8f8" right-text="注销" title="个人中心" @clickRight="logout"></uni-nav-bar>
 		<view class="header1"></view>
 		<view class="info1">
-			<image src="../../../static/img/extra/user.png"></image>
-			<view class="info_name1">NICKNAME</view>
-			<view class="info_text1">我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介我的简介</view>
+			<image :src="avatar" @tap="editProfile"></image>
+			<view class="info_name1">{{nickname}}</view>
+			<view class="info_text1" style="border-bottom: #f8f8f8 3upx solid;">{{description}}</view>
 			<view class="info_item1">
-				<view>16</view>
+				<view>{{following}}</view>
 				<view>关注</view>
 			</view>
 			<view class="info_item1">
-				<view>32</view>
+				<view>{{follower}}</view>
 				<view>粉丝</view>
 			</view>
 			<view class="info_item1">
-				<view>3</view>
-				<view>动态</view>
+				<view>{{praise}}</view>
+				<view>点赞</view>
 			</view>
 		</view>
 
@@ -86,13 +86,48 @@
 		},
 		data() {
 			return {
-				title: 'Hello'
+				nickname:'',
+				description:'',
+				following:0,
+				follower:0,
+				praise:0,
+				avatar:'../../../static/img/extra/none.jpg'
 			}
 		},
 		onLoad:function() {
 			_this = this;
+			this.getInfo();
+		},
+		onShow:function(){
+			if(getApp().globalData.newInfo){
+				this.getInfo();
+				getApp().globalData.newInfo=false;
+			}
 		},
 		methods: {
+			getInfo(){
+				uni.request({
+					url: _this.apiUrl+'/user/profile',
+					method: 'GET',
+					header:{'authorization':uni.getStorageSync('userToken')},
+					success: res => {
+						console.log(res);
+						if(res.data){
+							_this.nickname=res.data.nickname;
+							_this.description=res.data.description==null?'这个人很懒，什么都没留下':res.data.description;
+							_this.following=res.data.following;
+							_this.follower=res.data.follower;
+							_this.praise=res.data.praise;
+							this.avatar=_this.apiUrl+'/user/profile/avatar?userId='+res.data.userId;
+						}
+					}
+				});
+			},
+			editProfile(){
+				uni.navigateTo({
+					url:'../../detail/profile/profile'
+				})
+			},
 			logout() {
 				uni.removeStorage({
 					key: 'userToken',
