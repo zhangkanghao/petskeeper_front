@@ -141,10 +141,10 @@
 						if(res.data.ok){
 							try{
 								uni.setStorageSync('userToken',res.data.auth);
+								//console.log(res.data.auth);
 							}catch(e){
 								console.log(e);
 							}
-							_this.header={'content-type':'application/x-www-form-urlencoded','authorization':res.data.auth};
 							uni.reLaunch({url:'../tabbar/homepage/homepage'});
 						}else{
 							uni.showToast({
