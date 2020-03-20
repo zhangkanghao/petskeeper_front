@@ -1,12 +1,12 @@
 <template>
 	<view class="content1">
-		<!-- #ifdef APP-PLUS -->  
-		<view class="status_bar1">  
-		    <view class="top_view1"></view>  
-		</view>  
+		<!-- #ifdef APP-PLUS -->
+		<view class="status_bar1">
+			<view class="top_view1"></view>
+		</view>
 		<!-- #endif -->
-		<uni-nav-bar backgroundColor="#007AFF" color="#f8f8f8"  right-text="注销" title="个人中心" @clickRight="logout"></uni-nav-bar>
-		<view class="header1"></view>	
+		<uni-nav-bar backgroundColor="#007AFF" color="#f8f8f8" right-text="注销" title="个人中心" @clickRight="logout"></uni-nav-bar>
+		<view class="header1"></view>
 		<view class="info1">
 			<image src="../../../static/img/extra/user.png"></image>
 			<view class="info_name1">NICKNAME</view>
@@ -24,7 +24,7 @@
 				<view>动态</view>
 			</view>
 		</view>
-			
+
 		<view class="iconCon1">
 			<view>
 				<view class="icon-post1 icon_comment1">
@@ -49,7 +49,7 @@
 				<view>我的宠物</view>
 			</view>
 		</view>
-		
+
 		<view class="ui-table1">
 			<view>
 				<image class="icon_small1" src="../../../static/img/myinfo/hudong.png"></image>
@@ -78,69 +78,89 @@
 </template>
 
 <script>
+	var _this;
 	import uniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue"
 	export default {
-		components: {uniNavBar},
+		components: {
+			uniNavBar
+		},
 		data() {
 			return {
-				title:'Hello'
+				title: 'Hello'
 			}
 		},
+		onLoad:function() {
+			_this = this;
+		},
 		methods: {
-			logout(){
+			logout() {
 				uni.removeStorage({
-					key:'setUserData',
+					key: 'userToken',
 					success() {
-						uni.showToast({
-							title:'注销成功'
-						})
-						uni.reLaunch({
-							url:'../../login/login'
-						})
+						uni.request({
+							url: _this.apiUrl + '/user/logout',
+							method: 'GET',
+							header: _this.header,
+							complete: () => {
+								uni.showToast({
+									title:'注销成功',
+									duration:1000
+								})
+								uni.reLaunch({
+									url: '../../login/login'
+								})
+							}
+						});
 					}
 				})
-				
+
 			}
 		}
 	}
 </script>
 
 <style>
-	.status_bar1 {  
-	    height: var(--status-bar-height);  
-	    width: 100%;  
-	    background-color: #007AFF;  
-	}  
-	.top_view1 {  
-	    height: var(--status-bar-height);  
-	    width: 100%;  
-	    position: fixed;  
-	    background-color: #007AFF;  
-	    top: 0;  
-	    z-index: 999;  
+	.status_bar1 {
+		height: var(--status-bar-height);
+		width: 100%;
+		background-color: #007AFF;
 	}
+
+	.top_view1 {
+		height: var(--status-bar-height);
+		width: 100%;
+		position: fixed;
+		background-color: #007AFF;
+		top: 0;
+		z-index: 999;
+	}
+
 	.content1 {
 		text-align: center;
 		height: 100%;
 	}
-	*{
+
+	* {
 		margin: 0;
 		padding: 0;
 		font-family: "微软雅黑";
 	}
-	.header1{
+
+	.header1 {
 		/* 头部包含背景图 */
 		background-color: #007AFF;
 		width: 100%;
 		overflow: hidden;
 		height: 200upx;
 	}
-	.topView1{
+
+	.topView1 {
 		/* 放我的和关机图标 */
 		height: 50px;
 		line-height: 50px;
 	}
-	.topView1>view{
+
+	.topView1>view {
 		color: #FFFFFF;
 		display: inline-block;
 		float: left;
@@ -148,7 +168,8 @@
 		font-size: 18px;
 		font-weight: bold;
 	}
-	.topView1>image{
+
+	.topView1>image {
 		display: inline-block;
 		float: right;
 		padding-top: 32upx;
@@ -156,19 +177,20 @@
 		width: 50upx;
 		height: 50upx;
 	}
-	
-	
-	.info1{
+
+
+	.info1 {
 		/* 存放个人信息的 */
-		width: calc( 100% - 32px );
+		width: calc(100% - 32px);
 		background-color: #FFFFFF;
 		margin-left: 16px;
 		margin-top: -48px;
 		float: left;
 		border-radius: 8px;
-		box-shadow: 0 0 6px rgba(0,122,255,0.6);
+		box-shadow: 0 0 6px rgba(0, 122, 255, 0.6);
 	}
-	.info1>image{
+
+	.info1>image {
 		width: 66px;
 		height: 66px;
 		border-radius: 66px;
@@ -177,17 +199,19 @@
 		margin-top: -33px;
 		border: 1px solid #007AFF;
 	}
-	.info_name1{
+
+	.info_name1 {
 		text-align: center;
 		font-size: 16px;
 		color: #444444;
 		height: 30px;
 		line-height: 30px;
 	}
-	.info_text1{
+
+	.info_text1 {
 		text-align: center;
 		width: 80%;
-		margin:0 auto;
+		margin: 0 auto;
 		height: 30px;
 		line-height: 30px;
 		font-size: 14px;
@@ -196,27 +220,32 @@
 		text-overflow: ellipsis;
 		white-space: nowrap;
 	}
-	.info_item1{
-		width: calc( 100% / 3 );
+
+	.info_item1 {
+		width: calc(100% / 3);
 		float: left;
 		text-align: center;
 		padding: 4px 0;
 	}
-	.info_item1>view:nth-of-type(1){
+
+	.info_item1>view:nth-of-type(1) {
 		font-size: 12px;
 	}
-	.info_item1>view:nth-of-type(2){
+
+	.info_item1>view:nth-of-type(2) {
 		font-size: 14px;
 		color: #6F6F6F;
 	}
-	.info_item1:nth-of-type(1){
+
+	.info_item1:nth-of-type(1) {
 		border-radius: 0 0 0 8px;
 	}
-	.info_item1:nth-last-of-type(1){
+
+	.info_item1:nth-last-of-type(1) {
 		border-radius: 0 0 8px 0;
 	}
-	
-	.iconCon1{
+
+	.iconCon1 {
 		/* 放功能的图标 */
 		width: 100%;
 		float: left;
@@ -225,14 +254,15 @@
 		padding: 20px 0;
 		background-color: #ffffff;
 	}
-	.iconCon1>view{
+
+	.iconCon1>view {
 		float: left;
-		width: calc( 100% / 4 );
+		width: calc(100% / 4);
 		text-align: center;
 		font-size: 30upx;
 	}
-	
-	.ui-table1{
+
+	.ui-table1 {
 		float: left;
 		width: 100%;
 		background-color: #FFFFFF;
@@ -240,18 +270,22 @@
 		padding: 0 32px;
 		font-size: 30upx;
 	}
-	.ui-table1>view{
+
+	.ui-table1>view {
 		height: 50px;
 		line-height: 50px;
 		border-bottom: 1px solid #EFEFF4;
 	}
-	.ui-table1>view>view{
+
+	.ui-table1>view>view {
 		float: left;
 	}
-	.ui-table1>view>image{
+
+	.ui-table1>view>image {
 		float: left;
 	}
-	.icon_small1{
+
+	.icon_small1 {
 		border-radius: 10px;
 		font-size: 20px;
 		width: 40upx;
@@ -262,7 +296,8 @@
 		line-height: 30px;
 		color: #FFFFFF;
 	}
-	.icon_comment1{
+
+	.icon_comment1 {
 		border-radius: 10px;
 		font-size: 20px;
 		width: 40px;
@@ -271,24 +306,28 @@
 		line-height: 30px;
 		color: #FFFFFF;
 	}
-	.icon_comment_plus1{
+
+	.icon_comment_plus1 {
 		width: 30px;
 		height: 30px;
 		margin: 5px auto;
 		display: inline-block;
 		line-height: 30px;
 	}
-	
-	.icon-post1{
+
+	.icon-post1 {
 		background-color: #ffcc01;
 	}
-	.icon-collect1{
+
+	.icon-collect1 {
 		background-color: #ff3434;
 	}
-	.icon-draft1{
+
+	.icon-draft1 {
 		background-color: #6200b8;
 	}
-	.icon-pet1{
+
+	.icon-pet1 {
 		background-color: #5555ff;
 	}
 </style>

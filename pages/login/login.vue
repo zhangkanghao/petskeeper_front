@@ -1,6 +1,18 @@
 <template>
 	<view class="login">
 		<view class="content">
+			<!-- #ifdef APP-PLUS -->
+			<view class="status_bar">
+				<view class="top_view"></view>
+			</view>
+			<!-- #endif -->
+			<view class="example-body">
+				<uni-nav-bar :fixed="true" color="#333333" @clickLeft="goback">
+					<block class="cu-item" slot="left">
+						<text class="lg text-black cuIcon-back" style="font-size: 40upx;margin-left: 10upx;"></text>
+					</block>
+				</uni-nav-bar>
+			</view>
 			<!-- 头部logo -->
 			<view class="header">
 				<image :src="logoImage"></image>
@@ -73,12 +85,15 @@
 			this.isLogin();
 		},
 		methods: {
+			goback(){
+				uni.navigateBack({
+					delta:1
+				})
+			},
 			isLogin(){
-				console.log("islogin");
 				//判断缓存中是否登录过，直接登录
 				try {
-					const value = uni.getStorageSync('setUserData');
-					console.log(value);
+					const value = uni.getStorageSync('userToken');
 					if (value) {
 						//有登录信息
 						console.log("已登录用户：",value);
@@ -112,15 +127,36 @@
 		            });
 		            return;
 		        }
-				
-				console.log("登录成功")
-				uni.reLaunch({
-					url:"../tabbar/homepage/homepage"
-				})
 				_this.isRotate=true
-				setTimeout(function(){
-					_this.isRotate=false
-				},3000)
+				uni.request({
+					url: _this.apiUrl+'/user/login',
+					method: 'POST',
+					header:_this.header,
+					data: {
+						username:_this.phoneData,
+						password:_this.passData
+					},
+					success: res => {
+						if(res.data.ok){
+							_this.isRotate=false;
+							try{
+								uni.setStorageSync('userToken',res.data.auth);
+							}catch(e){
+								console.log(e);
+							}
+							_this.header={'content-type':'application/x-www-form-urlencoded','authorization':res.data.auth};
+							uni.reLaunch({url:'../tabbar/homepage/homepage'});
+						}
+						
+					},
+					fail: (fa) => {
+						console.log(fa);
+						_this.isRotate=false;
+						uni.showToast({
+							title:'登录异常，清检查网络状态'
+						})
+					}
+				});
 				// uni.showLoading({
 				// 	title: '登录中'
 				// });
@@ -194,4 +230,35 @@
 <style>
 	@import url("../../components/watch-login/css/icon.css");
 	@import url("./css/main.css");
+	page{
+		background-color: #FFFFFF;
+	}
+	.content {
+		text-align: center;
+		height: 100%;
+		background-color: #FFFFFF;
+	}
+	.status_bar {
+		height: var(--status-bar-height);
+		width: 100%;
+		background-color: #ffffff;
+	}
+	
+	.top_view {
+		height: var(--status-bar-height);
+		width: 100%;
+		position: fixed;
+		background-color: #ffffff;
+		top: 0;
+		z-index: 999;
+	}
+	
+	.example-body {
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: center;
+		padding: 0;
+		font-size: 14px;
+		background-color: #ffffff;
+	}
 </style>
