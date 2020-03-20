@@ -71,6 +71,7 @@
 				// 	});
 				// 	return false;
 				// }
+				_this.isRotate=true;
 				uni.request({
 					url: _this.apiUrl + '/user/resetCode',
 					method: 'GET',
@@ -78,6 +79,7 @@
 						username: _this.phoneData
 					},
 					success: res => {
+						_this.isRotate=false;
 						if (res.data.ok) {
 							uni.showToast({
 								icon: 'none',

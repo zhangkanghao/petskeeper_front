@@ -127,7 +127,7 @@
 		            });
 		            return;
 		        }
-				_this.isRotate=true
+				_this.isRotate=true;
 				uni.request({
 					url: _this.apiUrl+'/user/login',
 					method: 'POST',
@@ -137,8 +137,8 @@
 						password:_this.passData
 					},
 					success: res => {
+						_this.isRotate=false;
 						if(res.data.ok){
-							_this.isRotate=false;
 							try{
 								uni.setStorageSync('userToken',res.data.auth);
 							}catch(e){
@@ -147,7 +147,6 @@
 							_this.header={'content-type':'application/x-www-form-urlencoded','authorization':res.data.auth};
 							uni.reLaunch({url:'../tabbar/homepage/homepage'});
 						}else{
-							_this.isRotate=false;
 							uni.showToast({
 								icon: 'none',
 								position: 'bottom',
