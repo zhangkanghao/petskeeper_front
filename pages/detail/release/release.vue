@@ -113,8 +113,8 @@
 				likeicon:'like'
 			}
 		},
-		onLoad() {
-
+		onLoad(e) {
+			console.log(e);
 		},
 		methods: {
 			goback(){

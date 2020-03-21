@@ -216,7 +216,10 @@
 						uni.uploadFile({
 							url:_this.apiUrl+'/user/profile/avatar',
 							filePath:imgFile,
-							header:{authorization:uni.getStorageSync('userToken')},
+							header:{
+								'content-type':'application/x-www-form-urlencoded',
+								authorization:uni.getStorageSync('userToken')
+							},
 							name:'file',
 							success: (res1) => {
 								_this.avatar=imgFile;
