@@ -154,7 +154,7 @@
 			},
 			toDetail(){
 				uni.navigateTo({
-					url:'../../detail/release/release'
+					url:'../../detail/release/release?id=1'
 				})
 			},
 			onPulling(e) {},

@@ -14,7 +14,7 @@
 					<button class="cu-btn shadow followbtn" :class="isfollow?'bg-grey':'bg-orange'" @tap="dofollow">{{followText}}</button>
 				</block>
 				<view class="padding input-view">
-					<view class="cu-avatar round" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big81005.jpg);"></view>
+					<image class="cu-avatar round" :src="avatar"></image>
 					<text class="nickname">{{nickname}}</text>
 				</view>
 			</uni-nav-bar>
@@ -28,13 +28,13 @@
 				</swiper-item>
 			</swiper>
 			<view class="text-content cText">
-				{{content}}
+				{{articleInfo.content}}
 			</view>
 			<view class="text-gray text-sm text-right padding">
-				<text class="pdate">2020-3-19</text>
-				<text class="cuIcon-attentionfill margin-lr-xs"></text> 10
-				<text class="cuIcon-appreciatefill margin-lr-xs"></text> 20
-				<text class="cuIcon-messagefill margin-lr-xs"></text> 30
+				<text class="pdate">{{articleInfo.createTime}}</text>
+				<text class="cuIcon-attentionfill margin-lr-xs"></text> {{articleInfo.visit}}
+				<text class="cuIcon-appreciatefill margin-lr-xs"></text> {{articleInfo.praise}}
+				<text class="cuIcon-messagefill margin-lr-xs"></text> {{articleInfo.comment}}
 			</view>
 		</view>
 		<view class="cu-list menu-avatar comment solids-top">
@@ -63,7 +63,7 @@
 			</view>
 		</view>
 		<view class="cu-bar input foot">
-			<input @focus="InputFocus" @blur="InputBlur" :adjust-position="false" class="solid-bottom bg-gray fontsize" placeholder="快写下你的评论吧" :focus="false" maxlength="300" cursor-spacing="10"></input>
+			<input @focus="InputFocus" @blur="InputBlur" :adjust-position="true" class="solid-bottom bg-gray fontsize" placeholder="快写下你的评论吧" :focus="false" maxlength="300" cursor-spacing="10"></input>
 			<view class="cu-item">
 				<text class="lg fontsize" :class="['cuIcon-'+favoricon,isfavor?'text-yellow':'text-gray']" @tap="dofavor"></text>
 				<text class="lg fontsize" :class="['cuIcon-'+likeicon,islike?'text-red':'text-gray']" @tap="dolike"></text>
@@ -74,6 +74,7 @@
 </template>
 
 <script>
+	var _this;
 	import uniIcons from '@/components/uni-icons/uni-icons.vue'
 	import uniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue"
 	export default {
@@ -82,19 +83,24 @@
 		},
 		data() {
 			return {
-				title: 'Hello',
-				nickname: '秋裤小达人',
-				isfollow:false,
-				followText:'关注',
-				cardCur: 0,
+				InputBottom: 0,
+				avatar:'../../../static/img/extra/none.jpg',
+				articleInfo:{
+					id:0,
+					userId:0,
+					content:'折磨生出苦难，苦难又会加剧折磨，凡间这无穷的循环，将有我来终结！',
+					visit:0,
+					praise:0,
+					comment:0,
+					annoymous:false,
+					createTime:'',
+					updateTime:''
+				},
+				nickname: '佚名',
 				swiperList: [{
 					id: 0,
 					type: 'image',
-					url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big84000.jpg'
-				}, {
-					id: 1,
-					type: 'image',
-					url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big37006.jpg',
+					url: 'http://192.168.101.10:8080/articleImg/release/ead81064bf704078b97ebf69cf343e5a.jpg'
 				}],
 				commentList:[{
 					id:0,
@@ -106,7 +112,10 @@
 					comment:40
 					
 				}],
-				content:'折磨生出苦难，苦难又会加剧折磨，凡间这无穷的循环，将有我来终结！',
+				myOwn:false,//自己的文章
+				isfollow:false,
+				followText:'关注',
+				cardCur: 0,
 				isfavor:false,
 				favoricon:'favor',
 				islike:false,
@@ -114,7 +123,51 @@
 			}
 		},
 		onLoad(e) {
-			console.log(e);
+			_this=this;
+			if(Object.keys(e)){
+				uni.request({
+					url: this.apiUrl+'/article/get?articleId='+e.id,
+					method: 'GET',
+					header:{
+						authorization:uni.getStorageSync('userToken')
+					},
+					success: res => {
+						this.articleInfo=res.data;
+						var tmp=res.data;
+						console.log(res.data);
+						//头像
+						this.avatar=this.apiUrl+'/user/profile/avatar?userId='+tmp.userId;
+						//内容和图片
+						var parseContent=JSON.parse(tmp.content);
+						_this.articleInfo.content=parseContent.content;
+						for (var i = 0; i < parseContent.imgs.length; i++) {
+							var tmpImgObj={
+								id:i,
+								type: 'image',
+								url: _this.apiUrl+parseContent.imgs[i]
+							};
+							this.swiperList.push(tmpImgObj);
+						}
+						//评论浏览点赞数
+						//获取用户昵称
+						if(!tmp.annoymous){
+							uni.request({
+								url: this.apiUrl+'/user/profile/get?userId='+tmp.userId,
+								method: 'GET',
+								header:{
+									authorization:uni.getStorageSync('userToken')
+								},
+								success: res1 => {
+									console.log(res1);
+									_this.nickname=res1.data.nickname;
+								}
+							});
+						}
+						
+					}
+				});
+			}
+			
 		},
 		methods: {
 			goback(){
@@ -122,6 +175,12 @@
 					delta:1,
 					animationType:'slide-out-bottom'
 				})
+			},
+			InputFocus(e) {
+				this.InputBottom = e.detail.height
+			},
+			InputBlur(e) {
+				this.InputBottom = 0
 			},
 			dofollow(){
 				if(this.isfollow){
@@ -146,7 +205,7 @@
 						}
 					})
 				}else{
-					this.isfollow=true;
+					this.articleInfo.isfollow=true;
 					this.followText='已关注';
 					// TODO
 					// uni.request({
