@@ -1,7 +1,5 @@
 <script>
-globalData: {  
-	newInfo: false  
-};
+global.$newInfo=false;
 export default {
 	onLaunch: function() {
 		console.log('App Launch');

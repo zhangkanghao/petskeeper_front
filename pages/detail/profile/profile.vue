@@ -67,7 +67,8 @@
 					"following": 0,
 					"createTime": "createTime",
 					"updateTime": "updateTime"
-				}
+				},
+				newAvatar:false
 				
 			}
 		},
@@ -79,7 +80,6 @@
 				header:{'authorization':uni.getStorageSync('userToken')},
 				success: res => {
 					if(res.data){
-						console.log(res.data);
 						_this.userData=res.data;
 						this.index=_this.userData.gender==null?-1:(_this.userData.gender=='男'?0:1);
 						this.avatar=_this.apiUrl+'/user/profile/avatar?userId='+_this.userData.userId;
@@ -89,14 +89,21 @@
 		},
 		methods: {
 			cancel:()=>{
-				uni.navigateBack({
+				if(_this.newAvatar){
+					_this.newAvatar=false;
+					uni.reLaunch({
+						url:'../../tabbar/myinfo/myinfo'
+					})
+				}else{
+					uni.navigateBack({
 					delta:1,
 					animationType:'slide-out-right'
 				})
+				}
+				
 			},
 			saveInfo:()=>{
 				//保存数据
-				console.log(_this.userData);
 				uni.request({
 					url: _this.apiUrl+'/user/profile/update',
 					method: 'POST',
@@ -110,18 +117,25 @@
 						"location": _this.userData.location
 					},
 					success: res => {
-						console.log(res);
 						if(res.data.ok){
 							uni.showToast({
 								icon:'none',
 								title:'修改成功',
 								duration:1000
 							})
-							getApp().globalData.newInfo=true;
+							global.$newInfo=true;
 							setTimeout(function(){
-								uni.navigateBack({
-									delta:1
+								if(_this.newAvatar){
+									_this.newAvatar=false;
+									uni.reLaunch({
+										url:'../../tabbar/myinfo/myinfo'
+									})
+								}else{
+									uni.navigateBack({
+									delta:1,
+									animationType:'slide-out-right'
 								})
+								}
 							},200);
 						}else{
 							uni.showToast({
@@ -205,8 +219,8 @@
 							header:{authorization:uni.getStorageSync('userToken')},
 							name:'file',
 							success: (res1) => {
-								console.log(res1);
 								_this.avatar=imgFile;
+								_this.newAvatar=true;
 							}
 						})
 					},

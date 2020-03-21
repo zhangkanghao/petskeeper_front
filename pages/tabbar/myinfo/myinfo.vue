@@ -8,7 +8,7 @@
 		<uni-nav-bar backgroundColor="#007AFF" color="#f8f8f8" right-text="注销" title="个人中心" @clickRight="logout"></uni-nav-bar>
 		<view class="header1"></view>
 		<view class="info1">
-			<image :src="avatar" @tap="editProfile"></image>
+			<image :src="avatar" @tap="editProfile" @></image>
 			<view class="info_name1">{{nickname}}</view>
 			<view class="info_text1" style="border-bottom: #f8f8f8 3upx solid;">{{description}}</view>
 			<view class="info_item1">
@@ -99,9 +99,9 @@
 			this.getInfo();
 		},
 		onShow:function(){
-			if(getApp().globalData.newInfo){
+			if(global.$newInfo){
 				this.getInfo();
-				getApp().globalData.newInfo=false;
+				global.$newInfo=false;
 			}
 		},
 		methods: {
@@ -111,7 +111,6 @@
 					method: 'GET',
 					header:{'authorization':uni.getStorageSync('userToken')},
 					success: res => {
-						console.log(res);
 						if(res.data){
 							_this.nickname=res.data.nickname;
 							_this.description=res.data.description==null?'这个人很懒，什么都没留下':res.data.description;
