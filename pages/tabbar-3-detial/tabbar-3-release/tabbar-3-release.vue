@@ -136,56 +136,84 @@
 				this.annoymous=e.detail.value
 			},
 			publish(){
+				var promises=[];
 				//上传图片
 				for (var i = 0; i < this.imgList.length; i++) {
-					uni.uploadFile({
+					var promise=uni.uploadFile({
 						url:_this.apiUrl+'/article/addPic',
 						filePath:this.imgList[i],
 						header:{authorization:uni.getStorageSync('userToken')},
-						name:'file',
-						success: (uploadFileRes) => {
-							var res=JSON.parse(uploadFileRes.data);
-							if(res.ok){
-								this.imgUrlList.push(res.path);
-								console.log(this.imgUrlList);
+						name:'file'
+						// success: (uploadFileRes) => {
+						// 	var res=JSON.parse(uploadFileRes.data);
+						// 	if(res.ok){
+						// 		this.imgUrlList.push(res.path);
+						// 		console.log(this.imgUrlList);
+						// 	}else{
+						// 		uni.showToast({
+						// 			icon:'none',
+						// 			title:'错误:['+i+']:'+res.msg
+						// 		})
+						// 		return;
+						// 	}
+						// }
+					})
+					promises.push(promise);
+				}
+				Promise.all(promises).then(function(value){
+					for (var i = 0; i < value.length; i++) {
+						var res=JSON.parse(value[i][1].data);
+						if(res.ok){
+							_this.imgUrlList.push(res.path);
+						}else{
+							uni.showToast({
+								icon:'none',
+								title:'错误['+i+']:'+res.msg,
+								duration:2000
+							});
+							return;
+						}
+					}
+					console.log(_this.imgUrlList);
+					//封装content+img
+					var contentJson={
+						content:_this.textareaAValue,
+						imgs:_this.imgUrlList
+					};
+					//发布
+					uni.request({
+						url: _this.apiUrl+'/article/publish',
+						method: 'POST',
+						header:{
+							'content-type':'application/x-www-form-urlencoded',
+							authorization:uni.getStorageSync('userToken')
+						},
+						data: {
+							type:'动态',
+							readType:_this.readType,
+							content:JSON.stringify(contentJson),
+							annoymous:_this.annoymous
+						},
+						success: res => {
+							console.log(res);
+							if(res.data.ok){
+								uni.showToast({
+									icon:'none',
+									title:'发表成功'
+								});
+								uni.redirectTo({
+									url:'../../detail/release/release?id='+res.data.data.id
+								});
 							}else{
 								uni.showToast({
 									icon:'none',
-									title:'错误:['+i+']:'+res.msg
-								})
-								return;
+									title:'发表异常'
+								});
 							}
+							
 						}
-					})
-				}
-				console.log(this.imgUrlList);
-				
-				//封装content+img
-				// var contentJson={
-				// 	content:this.textareaAValue,
-				// 	imgs:this.imgUrlList
-				// };
-				// console.log(contentJson);
-				// //发布
-				// uni.request({
-				// 	url: _this.apiUrl+'/article/publish',
-				// 	method: 'POST',
-				// 	header:{
-				// 		'content-type':'application/x-www-form-urlencoded',
-				// 		authorization:uni.getStorageSync('userToken')
-				// 	},
-				// 	data: {
-				// 		type:'动态',
-				// 		readType:_this.readType,
-				// 		content:JSON.stringify(contentJson),
-				// 		annoymous:_this.annoymous
-				// 	},
-				// 	success: res => {
-				// 		// uni.redirectTo({
-				// 		// 	url:'../../detail/release/release?id='+res.data.data.id
-				// 		// })
-				// 	}
-				// });
+					});
+				})
 			}
 		}
 	}
