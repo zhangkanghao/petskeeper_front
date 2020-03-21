@@ -6,7 +6,7 @@
 		</view>
 		<!-- #endif -->
 		<view class="example-body" style="border-bottom: #f1f1f1 3upx solid;">
-			<uni-nav-bar :fixed="true" color="#333333"  leftIcon="left-nav" leftText="取消" title="添加动态" rightText="发布" @clickLeft="cancel" @clickRight="publish">
+			<uni-nav-bar :fixed="true" color="#333333"  leftIcon="left-nav" leftText="取消" title="添加动态" rightText="发布" @clickLeft="cancel" @clickRight="publish(1)">
 				<block class="cu-item" slot="right">
 					<text class="lg text-black cuIcon-camerafill" style="font-size: 40upx;margin-left: 10upx;"></text>
 				</block>
@@ -65,7 +65,6 @@
 			}
 		},
 		onLoad() {
-			console.log('rshow');
 			_this=this;
 		},
 		methods: {
@@ -77,22 +76,7 @@
 						cancelText:'拒绝',
 						content:'内容将被清空，是否保存为草稿',
 						success:res => {
-							if(res.confirm){
-								console.log('上传草稿');
-								status=1;
-								// uni.request({
-								// 	url: '',
-								// 	method: 'GET',
-								// 	data: {},
-								// 	success: res => {},
-								// 	fail: () => {},
-								// 	complete: () => {}
-								// });
-							}
-							uni.navigateBack({
-								delta:1,
-								animationType:'slide-out-bottom'
-							})
+							_this.publish(0);
 						}
 					})
 				}else{
@@ -135,7 +119,7 @@
 			Annoymous(e){
 				this.annoymous=e.detail.value
 			},
-			publish(){
+			publish(ptype){
 				var promises=[];
 				//上传图片
 				for (var i = 0; i < this.imgList.length; i++) {
@@ -144,19 +128,6 @@
 						filePath:this.imgList[i],
 						header:{authorization:uni.getStorageSync('userToken')},
 						name:'file'
-						// success: (uploadFileRes) => {
-						// 	var res=JSON.parse(uploadFileRes.data);
-						// 	if(res.ok){
-						// 		this.imgUrlList.push(res.path);
-						// 		console.log(this.imgUrlList);
-						// 	}else{
-						// 		uni.showToast({
-						// 			icon:'none',
-						// 			title:'错误:['+i+']:'+res.msg
-						// 		})
-						// 		return;
-						// 	}
-						// }
 					})
 					promises.push(promise);
 				}
@@ -174,13 +145,12 @@
 							return;
 						}
 					}
-					console.log(_this.imgUrlList);
 					//封装content+img
 					var contentJson={
 						content:_this.textareaAValue,
 						imgs:_this.imgUrlList
 					};
-					//发布
+					//发布或者存草稿
 					uni.request({
 						url: _this.apiUrl+'/article/publish',
 						method: 'POST',
@@ -192,22 +162,30 @@
 							type:'动态',
 							readType:_this.readType,
 							content:JSON.stringify(contentJson),
-							annoymous:_this.annoymous
+							annoymous:_this.annoymous,
+							status:ptype==1?true:false
 						},
 						success: res => {
-							console.log(res);
 							if(res.data.ok){
 								uni.showToast({
 									icon:'none',
-									title:'发表成功'
+									title:ptype==1?'发表成功':'保存成功'
 								});
-								uni.redirectTo({
-									url:'../../detail/release/release?id='+res.data.data.id
-								});
+								if(ptype==1){
+									uni.redirectTo({
+										url:'../../detail/release/release?id='+res.data.data.id
+									});
+								}else{
+									uni.navigateBack({
+										delta:1,
+										animationType:'slide-out-bottom'
+									})
+								}
+								
 							}else{
 								uni.showToast({
 									icon:'none',
-									title:'发表异常'
+									title:'请求异常'
 								});
 							}
 							
