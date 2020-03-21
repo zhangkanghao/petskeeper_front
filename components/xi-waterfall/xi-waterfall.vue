@@ -14,13 +14,11 @@
 						</view>
 						<text class="water-name">{{item.name}}</text>
 					</view>
-					<view class="water-bottom-item">
-						<image class="bottom-good" src="../../static/img/homepage/icon_good.png" mode="widthFix"></image>
+					<view class="water-bottom-item cu-item">
+						<text class="bottom-good" :class="['cuIcon-'+(item.isLiked?'likefill':'like'),'text-'+(item.isLiked?'red':'gray')]"></text>
 						<text class="water-num">{{item.likeCount}}</text>
 					</view>
 				</view>
-				<!-- 	<image :src="item.img" mode="widthFix"></image>
-				<view>{{ item.title }}</view> -->
 			</view>
 		</view>
 		<!-- 第二列 -->
@@ -38,7 +36,7 @@
 						<text class="water-name">{{item.name}}</text>
 					</view>
 					<view class="water-bottom-item">
-						<image class="bottom-good" src="../../static/img/homepage/icon_good.png" mode="widthFix"></image>
+						<text class="bottom-good" :class="['cuIcon-'+(item.isLiked?'likefill':'like'),'text-'+(item.isLiked?'red':'gray')]"></text>
 						<text class="water-num">{{item.likeCount}}</text>
 					</view>
 				</view>
@@ -66,10 +64,14 @@
 				columnSecond: [],
 				columnFirstHeight: 0,
 				columnSecondHeight: 0,
-				switchInsert: true
+				switchInsert: true,
+				likeIcon:'../../static/img/homepage/icon_good.png'
 			};
 		},
 		methods: {
+			like(){
+				console.log('like press');
+			},
 			// 获取dom元素的高度
 			async getDomHeight(selector) {
 				return new Promise(resolve => {
@@ -226,9 +228,8 @@
 		text-overflow: ellipsis;
 	}
 	.bottom-good {
-			width: 32upx;
-			height: 32upx;
-		}	
+		font-size: 32upx;
+	}	
 	.water-num {
 		line-height: 32upx;
 		font-size: 24upx;
