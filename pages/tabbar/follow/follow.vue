@@ -8,94 +8,80 @@
 		<view class="example-body">
 			<uni-nav-bar :fixed="true" color="#333333" background-color="#FFFFFF" title="关注"></uni-nav-bar>
 		</view>
-		<scroll-view scroll-y="true" enable-back-to-top="true" show-scrollbar="false" refresher-enabled="true" :refresher-triggered="triggered"
-		 :refresher-threshold="45" refresher-background="#eee" @refresherpulling="onPulling" @refresherrefresh="onRefresh"
-		 @refresherrestore="onRestore" @refresherabort="onAbort" @scrolltolower="loadMore">
-			<view id="waterfull" class="waterfall">
-				<waterfall :list="list"></waterfall>
-			</view>
-		</scroll-view>
-
+		<view id="waterfull" class="waterfall">
+			<waterfall :list="list"></waterfall>
+		</view>
+		<uni-fab ref="fab" :pattern="pattern" :content="content" horizontal="right" vertical="bottom" direction="horizontal"
+		 @trigger="trigger" @fabClick="fabClick" />
+		<view class="cu-item foot">{{loadText}}</view>
 	</view>
 </template>
 
 <script>
-	var _self,page=1;
+	var _self, pageNumber = 1,
+		pageSize = 10,
+		pageCount = 100;
 	import uniIcons from '@/components/uni-icons/uni-icons.vue'
 	import uniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue"
 	import waterfall from '@/components/xi-waterfall/xi-waterfall.vue'
+	import uniFab from '@/components/uni-fab/uni-fab.vue'
 	export default {
 		components: {
 			uniIcons,
 			uniNavBar,
-			waterfall
+			waterfall,
+			uniFab
 		},
 		data() {
 			return {
-				title: 'Hello',
-				city: '北京',
-				scrollTop: 0,
+				index: -1,
 				triggered: false,
-				old: {
-					scrollTop: 0
-				},
 				list: [],
-				data: [{
-					img: "http://pic1.win4000.com/wallpaper/2018-03-28/5abafe0c311e6.jpg",
-					id: "1084",
-					isLiked: "0",
-					likeCount: 0,
-					name: "笑饮孤鸿",
-					photo: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576173486008&di=68514e7684d0753c5100994fae6456cb&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201612%2F07%2F20161207195613_xuEFP.thumb.700_0.jpeg",
-					title: "虽然你我会下落不明",
-				}, {
-					img: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576173237976&di=4026f6a26b2c370611d6c6877aad1ded&imgtype=0&src=http%3A%2F%2Fdmimg.5054399.com%2Fallimg%2Fqidai%2Fndmzsjbz%2F001.jpg",
-					id: "1084",
-					isLiked: "0",
-					likeCount: 520,
-					name: "残城碎梦",
-					photo: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576173486004&di=3ef63a12a8372b81bfe97b81adee093d&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201612%2F07%2F20161207195604_jNSGc.thumb.700_0.jpeg",
-					title: "你知道我曾为你动过情"
-				}, {
-					img: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576173237976&di=4026f6a26b2c370611d6c6877aad1ded&imgtype=0&src=http%3A%2F%2Fdmimg.5054399.com%2Fallimg%2Fqidai%2Fndmzsjbz%2F001.jpg",
-					id: "1084",
-					isLiked: "0",
-					likeCount: 650,
-					name: "梦里南柯",
-					photo: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576173486004&di=3ef63a12a8372b81bfe97b81adee093d&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201612%2F07%2F20161207195604_jNSGc.thumb.700_0.jpeg",
-					title: "我欲与君相知，长命无绝衰。山无陵，江水为竭。东雷震震，夏雨雪。天地合，乃敢与君绝"
-				}, {
-					img: "http://img.51rry.com/note/2019-10-21/1571654591036.png",
-					id: "1084",
-					isLiked: "0",
-					likeCount: 999,
-					name: "无风",
-					photo: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576173620777&di=54b7ee5f59c30503096ccabbe0ed9a8e&imgtype=0&src=http%3A%2F%2Fp.store.itangyuan.com%2Fp%2Fchapter%2Fattachment%2Feg-VEBjtEA%2FEgfWEgMVEgjTe_-W4BEU40u3KhifeUL1HtDvHhsVgU9hK6LqG1opiMO.jpg",
-					title: "晓看天色，暮看云，行也思君，坐也思君",
-				}, {
-					img: "http://pic1.win4000.com/wallpaper/2018-10-31/5bd99d277748e.jpg",
-					id: "1084",
-					isLiked: "0",
-					likeCount: 25,
-					name: "君倾心",
-					photo: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576173486008&di=68514e7684d0753c5100994fae6456cb&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201612%2F07%2F20161207195613_xuEFP.thumb.700_0.jpeg",
-					title: "众里寻她千百度，蓦然回首，那人却在，灯火阑珊处",
-				}]
+				loadText: '没有更多了',
+				pattern: {
+					color: '#007AFF',
+					backgroundColor: '#fff',
+					buttonColor: 'orange'
+				},
+				content: [{
+						iconPath: '/static/img/tabbar-option/release.png',
+						text: '发动态',
+						active: false
+					},
+					{
+						iconPath: '/static/img/tabbar-option/article.png',
+						text: '发文章',
+						active: false
+					},
+					{
+						iconPath: '/static/img/tabbar-option/question.png',
+						text: '发问答',
+						active: false
+					}
+				]
 			};
+
 		},
 		onLoad() {
 			_self = this;
-			this._freshing = false;
-			this.triggered =true;
-			setTimeout(() => {
-				_self.list = _self.list.concat(_self.data);
-			}, 100)
+			pageNumber = 1;
+			this.getArticles();
+		},
+		onPullDownRefresh() {
+			this.getArticles();
+
 		},
 		onReachBottom() {
-			console.log(121);
-			this.loadMore();
+			if (this.loadText == '下拉加载更多') {
+				this.getArticles();
+			} else {
+				console.log('no more');
+			}
 		},
 		methods: {
+			PickerChange(e) {
+				this.index = e.detail.value
+			},
 			showCity() {
 				uni.showToast({
 					title: '选择城市'
@@ -111,64 +97,95 @@
 					title: '搜索'
 				})
 			},
-			onPulling(e) {},
-			onRefresh() {
-				if (this._freshing) {
-					uni.showToast({
-						title:'请勿重复刷新',
-						icon:'loading'
-					})
-					return;
+			toDetail() {
+				uni.navigateTo({
+					url: '../../detail/release/release?id=1'
+				})
+			},
+			trigger(e) {
+				console.log(e)
+				switch (e.index) {
+					case 0:
+						uni.navigateTo({
+							url: '../../tabbar-3-detial/tabbar-3-release/tabbar-3-release'
+						});
+						break;
+					case 1:
+						uni.navigateTo({
+							url: '../../tabbar-3-detial/tabbar-3-release/tabbar-3-release'
+						});
+						break;
+					case 2:
+						uni.navigateTo({
+							url: '../../tabbar-3-detial/tabbar-3-release/tabbar-3-release'
+						});
+						break;
 				}
-				this._freshing = true;
-				setTimeout(() => {
-					this.triggered = false;
-					this._freshing = false;
-					_self.list = _self.list.concat(_self.data);
-				}, 1000)
 			},
-			onRestore() {
-				this.triggered = 'restore'; // 需要重置
+			fabClick() {
+				console.log('fabClick');
 			},
-			onAbort() {
-				
-			},
-			insertData() {
-				this.list = this.list.concat(this.data);
-			},
-			initData:function(){
-				page=1;
-				uni.showNavigationBarLoading();
-				uni.redirectTo({
-					url: 'ip/article/query?page='+page,
-					success: res => {
-						uni.hideNavigationBarLoading();
-						page++;
+			getArticles() {
+				uni.request({
+					url: _self.apiUrl + '/article/myfollow',
+					method: 'GET',
+					header: {
+						'authorization': uni.getStorageSync('userToken')
 					},
-					fail: () => {},
-					complete: () => {},
-				});
-				
-			},
-			loadMore:()=>{
-				console.log(1);
-				uni.showNavigationBarLoading();
-				uni.redirectTo({
-					url: 'ip/article/query?page='+page,
-					success: res => {
-						uni.hideNavigationBarLoading();
-						page++;
+					data: {
+						pageNumber: pageNumber,
+						pageSize: pageSize
 					},
-					fail: () => {},
-					complete: () => {}
+					success: res => {
+						var $retList = res.data.articles;
+						var tmpList = [];
+						for (var i in $retList) {
+							console.log($retList[i]);
+							if ($retList[i].type == '动态') {
+								var contentObj = JSON.parse($retList[i].content);
+								var tmp = {
+									img: _self.apiUrl + contentObj.imgs[0],
+									id: $retList[i].id,
+									isLiked: $retList[i].targetId,
+									likeCount: $retList[i].praise,
+									name: $retList[i].annoymous ? '佚名' : $retList[i].nickname,
+									photo: $retList[i].annoymous ? '/static/img/extra/none.jpg' : _self.apiUrl +
+										'/user/profile/avatar?userId=' + $retList[i].userId,
+									title: contentObj.content
+								};
+								console.log(tmp);
+								tmpList.push(tmp);
+							}
+						}
+						//刷新->取代
+						_self.list = tmpList;
+						pageCount = res.data.pager.pageCount;
+						//下一页
+						if (pageNumber == pageCount) {
+							//重置
+							uni.showToast({
+								icon: 'none',
+								title: '已经是最后一页了哦'
+							});
+							_self.loadText = '没有更多了';
+						} else {
+							pageNumber++;
+							_self.loadText = '下拉加载更多';
+						}
+						uni.stopPullDownRefresh();
+					}
 				});
-				
+
 			}
 		}
 	};
 </script>
 
 <style>
+	page {
+		background-color: #eeeeee;
+	}
+
 	.content {
 		text-align: center;
 		height: 100%;
@@ -203,55 +220,9 @@
 		font-size: 28rpx;
 	}
 
-	.city {
-		/* #ifndef APP-PLUS-NVUE */
-		display: flex;
-		/* #endif */
-		flex-direction: row;
-		align-items: center;
-		justify-content: flex-start;
-		/* width: 160rpx;
-	*/
-		margin-left: 4px;
-	}
-
-	.input-view {
-		/* #ifndef APP-PLUS-NVUE */
-		display: flex;
-		/* #endif */
-		flex-direction: row;
-		/* width: 500rpx;*/
-		flex: 1;
-		background-color: #f8f8f8;
-		height: 30px;
-		border-radius: 15px;
-		padding: 0 15px;
-		flex-wrap: nowrap;
-		margin: 7px 0;
-		line-height: 30px;
-	}
-
-	.input-uni-icon {
-		line-height: 30px;
-	}
-
-	.nav-bar-input {
-		height: 30px;
-		line-height: 30px;
-		/* #ifdef APP-PLUS-NVUE */
-		width: 370rpx;
-		/* #endif */
-		padding: 0 5px;
-		font-size: 28rpx;
-		background-color: #f8f8f8;
-		text-align: left;
-	}
-	
-	scroll-view{}
-
 	.waterfall {
 		height: auto;
 		width: 100%;
-		margin: 10upx auto;
+		margin: 5upx auto;
 	}
 </style>

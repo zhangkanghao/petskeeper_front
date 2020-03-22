@@ -48,6 +48,7 @@
 		<view id="waterfull" class="waterfall">
 			<waterfall :list="list"></waterfall>
 		</view>
+		<uni-fab ref="fab" :pattern="pattern" :content="content" horizontal="right" vertical="bottom" direction="horizontal" @trigger="trigger" @fabClick="fabClick" />
 		<view class="cu-item foot">{{loadText}}</view>
 	</view>
 </template>
@@ -57,34 +58,45 @@
 	import uniIcons from '@/components/uni-icons/uni-icons.vue'
 	import uniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue"
 	import waterfall from '@/components/xi-waterfall/xi-waterfall.vue'
+	import uniFab from '@/components/uni-fab/uni-fab.vue'
 	export default {
 		components: {
 			uniIcons,
 			uniNavBar,
-			waterfall
+			waterfall,
+			uniFab
 		},
 		data() {
 			return {
 				index: -1,
 				picker: ['北京', '上海', '温州'],
 				city: '北京',
-				scrollTop: 0,
 				triggered: false,
-				old: {
-					scrollTop: 0
-				},
 				list: [],
-				data: [{
-					img: "http://pic1.win4000.com/wallpaper/2018-03-28/5abafe0c311e6.jpg",
-					id: "1084",
-					isLiked: false,
-					likeCount: 0,
-					name: "笑饮孤鸿",
-					photo: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576173486008&di=68514e7684d0753c5100994fae6456cb&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201612%2F07%2F20161207195613_xuEFP.thumb.700_0.jpeg",
-					title: "虽然你我会下落不明",
-				}],
-				loadText:'下拉加载更多'
+				loadText:'没有更多了',
+				pattern: {
+					color: '#007AFF',
+					backgroundColor: '#fff',
+					buttonColor: 'orange'
+				},
+				content: [{
+						iconPath: '/static/img/tabbar-option/release.png',
+						text: '发动态',
+						active: false
+					},
+					{
+						iconPath: '/static/img/tabbar-option/article.png',
+						text: '发文章',
+						active: false
+					},
+					{
+						iconPath: '/static/img/tabbar-option/question.png',
+						text: '发问答',
+						active: false
+					}
+				]
 			};
+			
 		},
 		onLoad() {
 			_self = this;
@@ -125,6 +137,29 @@
 				uni.navigateTo({
 					url:'../../detail/release/release?id=1'
 				})
+			},
+			trigger(e) {
+				console.log(e)
+				switch(e.index){
+					case 0:
+						uni.navigateTo({
+							url: '../../tabbar-3-detial/tabbar-3-release/tabbar-3-release'
+						});
+						break;
+					case 1:
+						uni.navigateTo({
+							url: '../../tabbar-3-detial/tabbar-3-release/tabbar-3-release'
+						});
+						break;
+					case 2:
+						uni.navigateTo({
+							url: '../../tabbar-3-detial/tabbar-3-release/tabbar-3-release'
+						});
+						break;
+				}
+			},
+			fabClick() {
+				console.log('fabClick');
 			},
 			getArticles() {
 				uni.request({
