@@ -140,7 +140,6 @@
 						var $retList = res.data.articles;
 						var tmpList = [];
 						for (var i in $retList) {
-							console.log($retList[i]);
 							if ($retList[i].type == '动态') {
 								var contentObj = JSON.parse($retList[i].content);
 								var tmp = {
@@ -153,7 +152,6 @@
 										'/user/profile/avatar?userId=' + $retList[i].userId,
 									title: contentObj.content
 								};
-								console.log(tmp);
 								tmpList.push(tmp);
 							}
 						}

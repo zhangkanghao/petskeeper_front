@@ -71,7 +71,6 @@
 				index: -1,
 				picker: ['北京', '上海', '温州'],
 				city: '北京',
-				triggered: false,
 				list: [],
 				loadText:'没有更多了',
 				pattern: {
@@ -171,7 +170,6 @@
 						var $retList=res.data.articles;
 						var tmpList=[];
 						for (var i in $retList) {
-							console.log($retList[i]);
 							if($retList[i].type=='动态'){
 								var contentObj=JSON.parse($retList[i].content);
 								var tmp={
@@ -183,7 +181,6 @@
 									photo: $retList[i].annoymous?'/static/img/extra/none.jpg':_self.apiUrl+'/user/profile/avatar?userId='+$retList[i].userId,
 									title: contentObj.content
 								};
-								console.log(tmp);
 								tmpList.push(tmp);
 							}
 						}
