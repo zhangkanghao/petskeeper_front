@@ -28,24 +28,24 @@
 		<view class="iconCon1">
 			<view>
 				<view class="icon-post1 icon_comment1">
-					<image class="icon_comment_plus1" src="../../../static/img/myinfo/post.png"></image>
+					<image class="icon_comment_plus1" src="../../../static/img/myinfo/post.png" @click="gotoPage" :data-id="1"></image>
 				</view>
 				<view>我的发布</view>
 			</view>
 			<view>
 				<view class="icon-collect1 icon_comment1">
-					<image class="icon_comment_plus1" src="../../../static/img/myinfo/collect.png"></image>
+					<image class="icon_comment_plus1" src="../../../static/img/myinfo/collect.png" @click="gotoPage" :data-id="2"></image>
 				</view>
 				<view>我的收藏</view>
 			</view>
 			<view>
 				<view class="icon-draft1 icon_comment1">
-					<image class="icon_comment_plus1" src="../../../static/img/myinfo/draft.png"></image>
+					<image class="icon_comment_plus1" src="../../../static/img/myinfo/draft.png" @click="gotoPage" :data-id="3"></image>
 				</view>
 				<view>草稿箱</view>
 			</view>
 			<view>
-				<image class="icon-pet1 icon_comment1" src="../../../static/img/myinfo/pet.png"></image>
+				<image class="icon-pet1 icon_comment1" src="../../../static/img/myinfo/pet.png" @click="gotoPage" :data-id="4"></image>
 				<view>我的宠物</view>
 			</view>
 		</view>
@@ -86,46 +86,73 @@
 		},
 		data() {
 			return {
-				nickname:'',
-				description:'',
-				following:0,
-				follower:0,
-				praise:0,
-				avatar:'../../../static/img/extra/none.jpg'
+				nickname: '',
+				description: '',
+				following: 0,
+				follower: 0,
+				praise: 0,
+				avatar: '../../../static/img/extra/none.jpg'
 			}
 		},
-		onLoad:function() {
+		onLoad: function() {
 			_this = this;
 			this.getInfo();
 		},
-		onShow:function(){
-			if(global.$newInfo){
+		onShow: function() {
+			if (global.$newInfo) {
 				this.getInfo();
-				global.$newInfo=false;
+				global.$newInfo = false;
 			}
 		},
 		methods: {
-			getInfo(){
+			getInfo() {
 				uni.request({
-					url: _this.apiUrl+'/user/profile',
+					url: _this.apiUrl + '/user/profile',
 					method: 'GET',
-					header:{'authorization':uni.getStorageSync('userToken')},
+					header: {
+						'authorization': uni.getStorageSync('userToken')
+					},
 					success: res => {
-						if(res.data){
-							_this.nickname=res.data.nickname;
-							_this.description=res.data.description==null?'这个人很懒，什么都没留下':res.data.description;
-							_this.following=res.data.following;
-							_this.follower=res.data.follower;
-							_this.praise=res.data.praise;
-							this.avatar=_this.apiUrl+'/user/profile/avatar?userId='+res.data.userId;
+						if (res.data) {
+							_this.nickname = res.data.nickname;
+							_this.description = res.data.description == null ? '这个人很懒，什么都没留下' : res.data.description;
+							_this.following = res.data.following;
+							_this.follower = res.data.follower;
+							_this.praise = res.data.praise;
+							this.avatar = _this.apiUrl + '/user/profile/avatar?userId=' + res.data.userId;
 						}
 					}
 				});
 			},
-			editProfile(){
+			editProfile() {
 				uni.navigateTo({
-					url:'../../detail/profile/profile'
+					url: '../../detail/profile/profile'
 				})
+			},
+			gotoPage(e) {
+				var index = e.currentTarget.dataset.id;
+				switch (index) {
+					case 1:
+						uni.navigateTo({
+							url:'../../detail/mypost/mypost'
+						})
+						break;
+					case 2:
+						uni.navigateTo({
+							url:'../../detail/mycollect/mycollect'
+						})
+						break;
+					case 3:
+						uni.navigateTo({
+							url:'../../detail/mydraft/mydraft'
+						})
+						break;
+					case 4:
+						uni.navigateTo({
+							url:'../../detail/mypet/mypet'
+						})
+						break;
+				}
 			},
 			logout() {
 				uni.removeStorage({
@@ -137,8 +164,8 @@
 							header: _this.header,
 							complete: () => {
 								uni.showToast({
-									title:'注销成功',
-									duration:1000
+									title: '注销成功',
+									duration: 1000
 								})
 								uni.reLaunch({
 									url: '../../login/login'

@@ -18,14 +18,11 @@
 		{
 			"path": "pages/tabbar/follow/follow",
 			"style": {
+				"enablePullDownRefresh":true,
 				"app-plus":{
 					"scrollIndicator":"none"
 				}
 			}
-		},
-		{
-			"path": "pages/tabbar/option/option",
-			"style": {}
 		},
 		{
 			"path": "pages/tabbar/message/message",
@@ -68,6 +65,26 @@
             "path" : "pages/detail/profile/profile",
             "style" : {}
         }
+        ,{
+            "path" : "pages/detail/mypost/mypost",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/detail/mycollect/mycollect",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/detail/mydraft/mydraft",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/detail/mypet/mypet",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/detail/petprofile/petprofile",
+            "style" : {}
+        }
     ],
 	"globalStyle": {
 		"navigationStyle":"custom",
@@ -92,21 +109,6 @@
 				"selectedIconPath": "static/img/tabbar/followactive.png",
 				"text": "关注"
 			},
-			//#ifdef MP-WEIXIN
-			{
-				"pagePath": "pages/tabbar/option/option",
-				"iconPath": "static/img/tabbar/post.png",
-				"selectedIconPath": "static/img/tabbar/postactive.png",
-				"text": "发布"
-			},
-			//#endif
-			//#ifndef MP-WEIXIN
-			{
-				"pagePath": "pages/tabbar/option/option",
-				"iconPath": "static/img/tabbar/post.png",
-				"selectedIconPath": "static/img/tabbar/postactive.png"
-			},
-			//#endif
 			{
 				"pagePath": "pages/tabbar/message/message",
 				"iconPath": "static/img/tabbar/message.png",
