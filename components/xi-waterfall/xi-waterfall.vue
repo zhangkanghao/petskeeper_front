@@ -3,7 +3,7 @@
 		<!-- 第一列 -->
 		<view class="column" id="columnFirst">
 			<view class="water-item" v-for="(item,index) in columnFirst" :key="index">
-				<view>
+				<view @click="toDetail" :data-id="item.id">
 					<image class="top-cover" :src="item.img"  mode="widthFix"></image>
 					<h3 class="top-title">{{item.title}}</h3>
 				</view>
@@ -24,7 +24,7 @@
 		<!-- 第二列 -->
 		<view class="column" id="columnSecond">
 			<view class="water-item" v-for="(item,index) in columnSecond" :key="index">
-				<view>
+				<view @click="toDetail" :data-id="item.id">
 					<image class="top-cover" :src="item.img"  mode="widthFix"></image>
 					<h3 class="top-title">{{item.title}}</h3>
 				</view>
@@ -71,6 +71,12 @@
 		methods: {
 			like(){
 				console.log('like press');
+			},
+			toDetail(e){
+				console.log(e);
+				uni.navigateTo({
+					url: '/pages/detail/release/release?id='+e.currentTarget.dataset.id
+				});
 			},
 			// 获取dom元素的高度
 			async getDomHeight(selector) {
@@ -178,6 +184,7 @@
 
 	.top-cover {
 		width: 100%;
+		border-radius: 12upx;
 	}
 
 	.top-title {

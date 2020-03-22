@@ -9,6 +9,7 @@
 		{
 			"path": "pages/tabbar/homepage/homepage",
 			"style": {
+				"enablePullDownRefresh":true,
 				"app-plus":{
 					"scrollIndicator":"none"
 				}

@@ -76,7 +76,15 @@
 						cancelText:'拒绝',
 						content:'内容将被清空，是否保存为草稿',
 						success:res => {
-							_this.publish(0);
+							if(res.confirm){
+								_this.publish(0);
+							}
+							else{
+								uni.navigateBack({
+									delta:1,
+									animationType:'slide-out-bottom'
+								})
+							}
 						}
 					})
 				}else{

@@ -45,19 +45,15 @@
 				</swiper-item>
 			</swiper>
 		</view>
-		<scroll-view scroll-y="true" enable-back-to-top="true" show-scrollbar="false" refresher-enabled="true" :refresher-triggered="triggered"
-		 :refresher-threshold="45" refresher-background="#eee" @refresherpulling="onPulling" @refresherrefresh="onRefresh"
-		 @refresherrestore="onRestore" @refresherabort="onAbort" @scrolltolower="loadMore">
-			<view id="waterfull" class="waterfall">
-				<waterfall :list="list"></waterfall>
-			</view>
-		</scroll-view>
-
+		<view id="waterfull" class="waterfall">
+			<waterfall :list="list"></waterfall>
+		</view>
+		<view class="cu-item foot">{{loadText}}</view>
 	</view>
 </template>
 
 <script>
-	var _self,pageNumber=1,pageSize=10;
+	var _self,pageNumber=1,pageSize=10,pageCount=100;
 	import uniIcons from '@/components/uni-icons/uni-icons.vue'
 	import uniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue"
 	import waterfall from '@/components/xi-waterfall/xi-waterfall.vue'
@@ -86,36 +82,25 @@
 					name: "笑饮孤鸿",
 					photo: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576173486008&di=68514e7684d0753c5100994fae6456cb&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201612%2F07%2F20161207195613_xuEFP.thumb.700_0.jpeg",
 					title: "虽然你我会下落不明",
-				}, {
-					img: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576173237976&di=4026f6a26b2c370611d6c6877aad1ded&imgtype=0&src=http%3A%2F%2Fdmimg.5054399.com%2Fallimg%2Fqidai%2Fndmzsjbz%2F001.jpg",
-					id: "1084",
-					isLiked: false,
-					likeCount: 520,
-					name: "残城碎梦",
-					photo: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576173486004&di=3ef63a12a8372b81bfe97b81adee093d&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201612%2F07%2F20161207195604_jNSGc.thumb.700_0.jpeg",
-					title: "你知道我曾为你动过情"
-				}, {
-					img: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576173237976&di=4026f6a26b2c370611d6c6877aad1ded&imgtype=0&src=http%3A%2F%2Fdmimg.5054399.com%2Fallimg%2Fqidai%2Fndmzsjbz%2F001.jpg",
-					id: "1084",
-					isLiked: true,
-					likeCount: 650,
-					name: "梦里南柯",
-					photo: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1576173486004&di=3ef63a12a8372b81bfe97b81adee093d&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201612%2F07%2F20161207195604_jNSGc.thumb.700_0.jpeg",
-					title: "我欲与君相知，长命无绝衰。山无陵，江水为竭。东雷震震，夏雨雪。天地合，乃敢与君绝"
-				}]
+				}],
+				loadText:'下拉加载更多'
 			};
 		},
 		onLoad() {
 			_self = this;
-			this._freshing = false;
-			this.triggered =true;
-			setTimeout(() => {
-				_self.list = _self.list.concat(_self.data);
-			}, 100)
+			pageNumber=1;
+			this.getArticles();
+		},
+		onPullDownRefresh() {
+			this.getArticles();
+			
 		},
 		onReachBottom() {
-			console.log(121);
-			this.loadMore();
+			if(this.loadText=='下拉加载更多'){
+				this.getArticles();
+			}else{
+				console.log('no more');
+			}
 		},
 		methods: {
 			PickerChange(e) {
@@ -141,50 +126,50 @@
 					url:'../../detail/release/release?id=1'
 				})
 			},
-			onPulling(e) {},
-			onRefresh() {
-				if (this._freshing) {
-					uni.showToast({
-						title:'请勿重复刷新',
-						icon:'loading'
-					})
-					return;
-				}
-				this._freshing = true;
+			getArticles() {
 				uni.request({
 					url: _self.apiUrl+'/article/',
 					method: 'GET',
 					header:{'authorization':uni.getStorageSync('userToken')},
+					data:{pageNumber:pageNumber,pageSize:pageSize},
 					success: res => {
-						console.log(res);
+						var $retList=res.data.articles;
+						var tmpList=[];
+						for (var i in $retList) {
+							console.log($retList[i]);
+							if($retList[i].type=='动态'){
+								var contentObj=JSON.parse($retList[i].content);
+								var tmp={
+									img: _self.apiUrl+contentObj.imgs[0],
+									id: $retList[i].id,
+									isLiked: $retList[i].targetId,
+									likeCount: $retList[i].praise,
+									name: $retList[i].annoymous?'佚名':$retList[i].nickname,
+									photo: $retList[i].annoymous?'/static/img/extra/none.jpg':_self.apiUrl+'/user/profile/avatar?userId='+$retList[i].userId,
+									title: contentObj.content
+								};
+								console.log(tmp);
+								tmpList.push(tmp);
+							}
+						}
+						//刷新->取代
+						_self.list=tmpList;
+						pageCount=res.data.pager.pageCount;
+						//下一页
+						if(pageNumber==pageCount){
+							//重置
+							uni.showToast({
+								icon:'none',
+								title: '已经是最后一页了哦'
+							});
+							_self.loadText='没有更多了';
+						}else{
+							pageNumber++;
+							_self.loadText='下拉加载更多';
+						}
+						
+						uni.stopPullDownRefresh();
 					}
-				});
-				setTimeout(() => {
-					this.triggered = false;
-					this._freshing = false;
-					// _self.list = _self.list.concat(_self.data);
-				}, 1000)
-			},
-			onRestore() {
-				this.triggered = 'restore'; // 需要重置
-			},
-			onAbort() {
-				
-			},
-			insertData() {
-				this.list = this.list.concat(this.data);
-			},
-			loadMore:()=>{
-				console.log(1);
-				uni.showNavigationBarLoading();
-				uni.redirectTo({
-					url: 'ip/article/query?page='+page,
-					success: res => {
-						uni.hideNavigationBarLoading();
-						page++;
-					},
-					fail: () => {},
-					complete: () => {}
 				});
 				
 			}
@@ -193,6 +178,9 @@
 </script>
 
 <style>
+	page{
+		background-color: #eeeeee;
+	}
 	.content {
 		text-align: center;
 		height: 100%;
