@@ -37,41 +37,53 @@
 				<text class="cuIcon-messagefill margin-lr-xs"></text> {{articleInfo.comment}}
 			</view>
 		</view>
-		<view class="cu-list menu-avatar comment solids-top">
-			<view class="cu-item" v-for="(item,index) in commentList" :key="index">
-				<image class="cu-avatar round" src="https://ossweb-img.qq.com/images/lol/img/champion/Morgana.png" mode="widthFix"></image>
+		<view class="cu-list menu-avatar comment solids-top margin-tb-sm">
+			<view class="cu-item " v-for="(item,index) in commentList" :key="index">
+				<image class="cu-avatar round" :src="item.url" mode="widthFix"></image>
 				<view class="content">
-					<view class="text-grey">莫甘娜</view>
-					<view class="text-gray text-content text-df">
-						凯尔，你被自己的光芒变的盲目。
+					<view class="text-black text-bold">{{item.nickname}}</view>
+					<view class="text-black text-content text-df">
+						{{item.content}}
 					</view>
-					<view class="bg-gray padding-sm radius margin-top-sm  text-sm">
+					<view class="bg-gray padding-sm radius text-sm margin-top-sm" v-for="(reply,index) in item.replies">
 						<view class="flex" style="border-bottom: #000000 2upx solid;line-height: 40upx;">
-							<view>凯尔：</view>
-							<view class="flex-sub">妹妹，你在帮他们给黑暗找借口吗?</view>
+							<view>{{reply.nickname}}:</view>
+							<view class="flex-sub">{{reply.content}}</view>
 						</view>
-						<view style="color: #0081FF;">点击查看更多回复</view>
 					</view>
+					<view class="text-sm text-gray" @tap="queryReplies(index)">点击展开更多回复</view>
 					<view class="margin-top-sm flex justify-between">
 						<view class="text-gray text-df">{{item.date}}</view>
 						<view>
-							<text class="cuIcon-appreciatefill text-red"></text>{{item.like}}
-							<text class="cuIcon-messagefill text-gray margin-left-sm"></text>{{item.comment}}
+							<text :class="['cuIcon-'+(item.targetId?'likefill':'like'),item.targetId?'text-red':'text-gray']" @click="dopraise(index)"></text>{{item.praise}}
+							<text class="cuIcon-messagefill text-gray margin-left-sm" @click="comReply(index)"></text>{{item.comment}}
 						</view>
 					</view>
 				</view>
 			</view>
 		</view>
+		<view class="text-center text-gray text-sm" style="margin-bottom: 100upx;">{{bottomText}}</view>
 		<view class="cu-bar input foot">
-			<input @focus="InputFocus" @blur="InputBlur" :adjust-position="true" class="solid-bottom bg-gray fontsize"
+			<input @click="InputFocus" class="solid-bottom bg-gray fontsize"
 			 placeholder="快写下你的评论吧" :focus="false" maxlength="300" cursor-spacing="10"></input>
 			<view class="cu-item">
-				<text class="lg fontsize" :class="['cuIcon-'+(isfavor?'favorfill':'favor'),isfavor?'text-yellow':'text-gray']" @tap="dofavor"></text>
-				<text class="lg fontsize" :class="['cuIcon-'+(islike?'likefill':'like'),islike?'text-red':'text-gray']" @tap="dolike"></text>
+				<text class="text-lg fontsize" :class="['cuIcon-'+(isfavor?'favorfill':'favor'),isfavor?'text-yellow':'text-gray']" @tap="dofavor"></text>
+				<text class="text-lg fontsize" :class="['cuIcon-'+(islike?'likefill':'like'),islike?'text-red':'text-gray']" @tap="dolike"></text>
 			</view>
 		</view>
-
+		<view class="cu-modal bottom-modal" :class="commentbox?'show':''">
+			<view class="cu-dialog">
+				<view class="cu-bar bg-white">
+					<view class="action text-green" @tap="hideModal">取消</view>
+					<view class="action text-blue" @tap="doComment">发布</view>
+				</view>
+				<view class="cu-form-group margin-top box-comment">
+					<textarea maxlength="-1" @input="commentInput" @blur="InputBlur" :focus="focus" placeholder="发布评论" adjust-position="true" cursor-spacing="10"></textarea>
+				</view>
+			</view>
+		</view>
 	</view>
+	
 </template>
 
 <script>
@@ -101,26 +113,33 @@
 				},
 				nickname: '佚名',
 				swiperList: [],
-				commentList: [{
-					id: 0,
-					nickname: '莫甘娜',
-					url: 'https://ossweb-img.qq.com/images/lol/img/champion/Morgana.png',
-					content: '凯尔，你被自己的光芒变的盲目。',
-					date: '2020年3月19日',
-					like: 20,
-					comment: 40
-
-				}],
+				commentList: [],
 				myOwn: false, //自己的文章
 				isfollow: false,
 				cardCur: 0,
 				isfavor: false,
 				islike: false,
+				commentbox:false,
+				comment:{
+					text:'',
+					type:false,
+					to:0
+				},
+				comPager:{
+					pageNumber:1,
+					pageSize:10,
+					pageCount:0
+				},
+				focus:false,
+				bottomText:'上拉加载更多'
 			}
 		},
 		onLoad(e) {
 			_this = this;
 			this.getArticleDetail(e.id);
+		},
+		onReachBottom() {
+			this.getComments();
 		},
 		methods: {
 			goback() {
@@ -128,6 +147,12 @@
 					delta: 1,
 					animationType: 'slide-out-bottom'
 				})
+			},
+			showModal(){
+				this.commentbox=true;
+			},
+			hideModal(){
+				this.commentbox=false;
 			},
 			getArticleDetail(articleId){
 				uni.request({
@@ -175,6 +200,7 @@
 						if(!this.isMe){
 							this.initFollow();
 						}
+						this.getComments();
 					}
 				});
 			},
@@ -221,10 +247,19 @@
 				});
 			},
 			InputFocus(e) {
-				this.InputBottom = e.detail.height
+				this.comment.type=false;
+				this.comment.to=this.articleInfo.id;
+				this.focus=true;
+				this.showModal();
 			},
 			InputBlur(e) {
-				this.InputBottom = 0
+				this.focus=false;
+				setTimeout(()=>{
+					this.hideModal();
+				},100)
+			},
+			commentInput(e){
+				this.comment.text=e.detail.value;
 			},
 			dofollow() {
 				if (this.isfollow) {
@@ -364,10 +399,135 @@
 						}
 					});
 				}
+			},
+			doComment(){
+				console.log(this.comment);
+				uni.request({
+					url: this.apiUrl+'/comment/add',
+					method: 'POST',
+					data: {
+						type:this.comment.type,
+						to:this.comment.to,
+						content:this.comment.text
+					},
+					header:{'content-type':'application/x-www-form-urlencoded',authorization:uni.getStorageSync('userToken')},
+					success: res => {
+						console.log(res);
+						var Obj=res.data.data;
+						var tmp={
+							id: Obj.id,
+							nickname: '我',
+							url: this.apiUrl+'/user/profile/avatar?userId='+uni.getStorageSync('userId'),
+							content: Obj.content,
+							date: Obj.updateTime,
+							praise: Obj.praise,
+							comment: Obj.comment,
+							targetId:true,
+							replies:[]
+						}
+						this.commentList.push(tmp);
+					}
+				});
+			},
+			getComments(){
+				uni.request({
+					url: this.apiUrl+'/comment/commentOfA?articleId='+this.articleInfo.id+'&pageNumber='+this.comPager.pageNumber+'&pageSize='+this.comPager.pageSize,
+					method: 'GET',
+					header:{authorization:uni.getStorageSync('userToken')},
+					success: res => {
+						console.log(res);
+						var Objs=res.data.comments;
+						for (var i = 0; i < Objs.length; i++) {
+							var tmp={
+								id: Objs[i].id,
+								nickname: Objs[i].nickname,
+								url: this.apiUrl+'/user/profile/avatar?userId='+Objs[i].from,
+								content: Objs[i].content,
+								date: Objs[i].date,
+								praise: Objs[i].praise,
+								comment: Objs[i].comment,
+								targetId:Objs[i].targetId,
+								replies:[],
+								pageNumber:1
+							}
+							this.commentList.push(tmp);
+						}
+						this.comPager=res.data.pager;
+						if(this.comPager.pageNumber>this.comPager.pageCount){
+							this.bottomText='没有更多了';
+						}else{
+							this.comPager.pageNumber++;
+							this.bottomText='上拉加载更多';
+						}
+					}
+				});
+			},
+			dopraise(index){
+				var tmp=this.commentList[index];
+				if (tmp.targetId) {
+					this.commentList[index].targetId = false;
+					this.commentList[index].praise--;
+					uni.request({
+						url: this.apiUrl+'/praise/remove?type=1&targetId='+this.commentList[index].id,
+						method: 'GET',
+						header:{'authorization':uni.getStorageSync('userToken')},
+						success: res => {
+							if(!res.data.ok){
+								uni.showToast({
+									icon:'none',
+									title: res.data.msg
+								});
+							}
+						}
+					});
+				} else {
+					this.commentList[index].targetId = true;
+					this.commentList[index].praise++;
+					uni.request({
+						url: this.apiUrl+'/praise/add?type=1&targetId='+this.commentList[index].id,
+						method: 'GET',
+						header:{'authorization':uni.getStorageSync('userToken')},
+						success: res => {
+							if(!res.data.ok){
+								uni.showToast({
+									icon:'none',
+									title: res.data.msg
+								});
+							}
+						}
+					});
+				}
+			},
+			comReply(index){
+				console.log(index);
+				this.comment.type=true;
+				this.comment.to=this.commentList[index].id;
+				this.showModal();
+				setTimeout(()=>{
+					this.focus=true;
+				},100)
+			},
+			queryReplies(index){
+				console.log(index);
+				uni.request({
+					url: this.apiUrl+'/comment/commentOfC?commentId='+this.commentList[index].id+'&pageNumber='+this.commentList[index].pageNumber+'&pageSize=3',
+					method: 'GET',
+					header:{authorization:uni.getStorageSync('userToken')},
+					success: res => {
+						console.log(res);
+						if(res.data.replys.length>0){
+							this.commentList[index].replies=this.commentList[index].replies.concat(res.data.replys);
+							this.commentList[index].pageNumber++;
+						}else{
+							uni.showToast({
+								icon:'none',
+								title: '没有更多回复了',
+								position:'bottom'
+							});
+						}
+					}
+				});
 			}
-
-
-
 		}
 	}
 </script>
@@ -447,4 +607,11 @@
 		font-size: 40upx;
 		margin: 0 20upx;
 	}
+	
+	.box-comment{
+		margin-top: 0;
+		text-align: start;
+	}
+	
+	
 </style>

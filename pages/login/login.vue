@@ -141,6 +141,7 @@
 						if(res.data.ok){
 							try{
 								uni.setStorageSync('userToken',res.data.auth);
+								uni.setStorageSync('userId',res.data.userId);
 								//console.log(res.data.auth);
 							}catch(e){
 								console.log(e);
