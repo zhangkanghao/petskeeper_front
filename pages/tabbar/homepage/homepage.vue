@@ -26,30 +26,17 @@
 				</view>
 			</uni-nav-bar>
 		</view>
-		<view id="swiper" class="swiperView">
-			<swiper :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000" circular="true">
-				<swiper-item>
-					<view class="swiper-item" @click="toDetail">
-						<image src="../../../static/img/homepage/item1.png" mode="scaleToFill"></image>
-					</view>
-				</swiper-item>
-				<swiper-item>
-					<view class="swiper-item">
-						<image src="../../../static/img/homepage/item2.png" mode="scaleToFill"></image>
-					</view>
-				</swiper-item>
-				<swiper-item>
-					<view class="swiper-item">
-						<image src="../../../static/img/homepage/item3.png" mode="scaleToFill"></image>
-					</view>
-				</swiper-item>
-			</swiper>
-		</view>
+		<swiper class="screen-swiper square-dot" :indicator-dots="true" :circular="true"
+		 :autoplay="true" interval="3000" duration="500">
+			<swiper-item v-for="(item,index) in swiperList" :key="index">
+				<image :src="item.url" mode="aspectFill"></image>
+			</swiper-item>
+		</swiper>
 		<view id="waterfull" class="waterfall">
 			<waterfall :list="list"></waterfall>
 		</view>
 		<uni-fab ref="fab" :pattern="pattern" :content="content" horizontal="right" vertical="bottom" direction="horizontal" @trigger="trigger" @fabClick="fabClick" />
-		<view class="cu-item foot">{{loadText}}</view>
+		<view class="cu-item foot" style="padding: 40upx; height: 100upx;">{{loadText}}</view>
 	</view>
 </template>
 
@@ -71,6 +58,19 @@
 				index: -1,
 				picker: ['北京', '上海', '温州'],
 				city: '北京',
+				swiperList:[{
+					url:'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1584978895934&di=bd6a9bda53e7540ced3a4fc4f6194514&imgtype=0&src=http%3A%2F%2Fwww.33lc.com%2Farticle%2FUploadPic%2F2012-7%2F201272714191252206.jpg'
+				},{
+					url:'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1584978928926&di=670c9cb6634597bf2a3d892512125283&imgtype=0&src=http%3A%2F%2Fimg0.imgtn.bdimg.com%2Fit%2Fu%3D1902882455%2C82944671%26fm%3D214%26gp%3D0.jpg'
+				},{
+					url:'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1584978895934&di=7d29702dd621660cc6c3603f63565ec5&imgtype=0&src=http%3A%2F%2Fwww.cpse-expo.com%2Fuploadfile%2F2018%2F0425%2F20180425091802416.jpg'
+				},{
+					url:'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1584978895934&di=5d19490e36c3894e1389d479cd2be300&imgtype=0&src=http%3A%2F%2Fpic6.58cdn.com.cn%2Fp1%2Fbig%2Fn_v2e40a9d7e2acc4352a5e208481fef9a44.jpg'
+				},{
+					url:'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1584978895933&di=a884e606d1863fd822b1618ac6186402&imgtype=0&src=http%3A%2F%2Fwww.33lc.com%2Farticle%2FUploadPic%2F2012-7%2F201272714223895294.jpg'
+				},{
+					url:'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1584978895933&di=4577367661c7c8118d19c4d6326a397a&imgtype=0&src=http%3A%2F%2Fpic1.win4000.com%2Fwallpaper%2F2017-12-01%2F5a20f8784e92b.jpg'
+				}],
 				list: [],
 				loadText:'没有更多了',
 				pattern: {
@@ -216,12 +216,11 @@
 
 <style>
 	page{
-		background-color: #eeeeee;
+		background-color: #FFFFFF;
 	}
 	.content {
 		text-align: center;
-		height: 100%;
-		background-color: #eeeeee;
+		background-color: #FFFFFF;
 	}
 
 	.status_bar {
@@ -298,18 +297,22 @@
 
 	.swiperView {
 		width: 100%;
-		height: 280upx;
+		height: 350upx;
 		background-color: #FFCC01;
+	}
+	.swiperView >swiper-item{
+		width: 100%;
+		height: 100%;
 	}
 
 	.swiper-item {
 		width: 100%;
-		height: 280upx;
+		height: 350upx;
 	}
 
 	.swiper-item>image {
 		width: 100%;
-		height: 280upx;
+		height: 350upx;
 	}
 	
 	scroll-view{}

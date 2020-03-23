@@ -8,14 +8,14 @@
 		<uni-nav-bar backgroundColor="#007AFF" color="#f8f8f8" right-text="注销" title="个人中心" @clickRight="logout"></uni-nav-bar>
 		<view class="header1"></view>
 		<view class="info1">
-			<image :src="avatar" @tap="editProfile" @></image>
+			<image :src="avatar" @tap="editProfile"></image>
 			<view class="info_name1">{{nickname}}</view>
 			<view class="info_text1" style="border-bottom: #f8f8f8 3upx solid;">{{description}}</view>
-			<view class="info_item1">
+			<view class="info_item1" @tap="myfollow">
 				<view>{{following}}</view>
 				<view>关注</view>
 			</view>
-			<view class="info_item1">
+			<view class="info_item1" @tap="myfans">
 				<view>{{follower}}</view>
 				<view>粉丝</view>
 			</view>
@@ -175,7 +175,20 @@
 					}
 				})
 
+			},
+			myfollow(){
+				uni.navigateTo({
+					url: '../../detail/myfollow/myfollow',
+					animationType:'slide-in-bottom'
+				});
+			},
+			myfans(){
+				uni.navigateTo({
+					url:'../../detail/myfans/myfans',
+					animationType:'slide-in-bottom'
+				})
 			}
+			
 		}
 	}
 </script>
