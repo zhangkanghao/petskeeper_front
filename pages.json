@@ -85,6 +85,14 @@
             "path" : "pages/detail/petprofile/petprofile",
             "style" : {}
         }
+        ,{
+            "path" : "pages/detail/myfollow/myfollow",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/detail/myfans/myfans",
+            "style" : {}
+        }
     ],
 	"globalStyle": {
 		"navigationStyle":"custom",
