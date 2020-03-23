@@ -20,8 +20,8 @@
 			</uni-nav-bar>
 		</view>
 		<view class="detail">
-			<swiper class="screen-swiper square-dot" :indicator-dots="true" :circular="true"
-			 :autoplay="true" interval="5000" duration="500">
+			<swiper class="screen-swiper square-dot" :indicator-dots="true" :circular="true" :autoplay="true" interval="5000"
+			 duration="500">
 				<swiper-item v-for="(item,index) in swiperList" :key="index">
 					<image :src="item.url" mode="aspectFill" v-if="item.type=='image'"></image>
 					<video :src="item.url" autoplay loop muted :show-play-btn="false" :controls="false" objectFit="cover" v-if="item.type=='video'"></video>
@@ -63,13 +63,14 @@
 			</view>
 		</view>
 		<view class="cu-bar input foot">
-			<input @focus="InputFocus" @blur="InputBlur" :adjust-position="true" class="solid-bottom bg-gray fontsize" placeholder="快写下你的评论吧" :focus="false" maxlength="300" cursor-spacing="10"></input>
+			<input @focus="InputFocus" @blur="InputBlur" :adjust-position="true" class="solid-bottom bg-gray fontsize"
+			 placeholder="快写下你的评论吧" :focus="false" maxlength="300" cursor-spacing="10"></input>
 			<view class="cu-item">
-				<text class="lg fontsize" :class="['cuIcon-'+favoricon,isfavor?'text-yellow':'text-gray']" @tap="dofavor"></text>
-				<text class="lg fontsize" :class="['cuIcon-'+likeicon,islike?'text-red':'text-gray']" @tap="dolike"></text>
+				<text class="lg fontsize" :class="['cuIcon-'+(isfavor?'favorfill':'favor'),isfavor?'text-yellow':'text-gray']" @tap="dofavor"></text>
+				<text class="lg fontsize" :class="['cuIcon-'+(islike?'likefill':'like'),islike?'text-red':'text-gray']" @tap="dolike"></text>
 			</view>
 		</view>
-		
+
 	</view>
 </template>
 
@@ -78,103 +79,111 @@
 	import uniIcons from '@/components/uni-icons/uni-icons.vue'
 	import uniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue"
 	export default {
-		components:{
-			uniIcons,uniNavBar
+		components: {
+			uniIcons,
+			uniNavBar
 		},
 		data() {
 			return {
 				InputBottom: 0,
-				avatar:'../../../static/img/extra/none.jpg',
-				articleInfo:{
-					id:0,
-					userId:0,
-					content:'折磨生出苦难，苦难又会加剧折磨，凡间这无穷的循环，将有我来终结！',
-					visit:0,
-					praise:0,
-					comment:0,
-					annoymous:false,
-					createTime:'',
-					updateTime:''
+				avatar: '../../../static/img/extra/none.jpg',
+				articleInfo: {
+					id: 0,
+					userId: 0,
+					content: '折磨生出苦难，苦难又会加剧折磨，凡间这无穷的循环，将有我来终结！',
+					visit: 0,
+					praise: 0,
+					comment: 0,
+					annoymous: false,
+					createTime: '',
+					updateTime: ''
 				},
 				nickname: '佚名',
-				swiperList: [{
+				swiperList: [],
+				commentList: [{
 					id: 0,
-					type: 'image',
-					url: 'http://192.168.101.10:8080/articleImg/release/ead81064bf704078b97ebf69cf343e5a.jpg'
+					nickname: '莫甘娜',
+					url: 'https://ossweb-img.qq.com/images/lol/img/champion/Morgana.png',
+					content: '凯尔，你被自己的光芒变的盲目。',
+					date: '2020年3月19日',
+					like: 20,
+					comment: 40
+
 				}],
-				commentList:[{
-					id:0,
-					nickname:'莫甘娜',
-					url:'https://ossweb-img.qq.com/images/lol/img/champion/Morgana.png',
-					content:'凯尔，你被自己的光芒变的盲目。',
-					date:'2020年3月19日',
-					like:20,
-					comment:40
-					
-				}],
-				myOwn:false,//自己的文章
-				isfollow:false,
-				followText:'关注',
+				myOwn: false, //自己的文章
+				isfollow: false,
+				followText: '关注',
 				cardCur: 0,
-				isfavor:false,
-				favoricon:'favor',
-				islike:false,
-				likeicon:'like'
+				isfavor: false,
+				islike: false,
 			}
 		},
 		onLoad(e) {
-			_this=this;
-			if(Object.keys(e)){
-				uni.request({
-					url: this.apiUrl+'/article/get?articleId='+e.id,
-					method: 'GET',
-					header:{
-						authorization:uni.getStorageSync('userToken')
-					},
-					success: res => {
-						this.articleInfo=res.data;
-						var tmp=res.data;
-						console.log(res.data);
-						//头像
-						this.avatar=this.apiUrl+'/user/profile/avatar?userId='+tmp.userId;
-						//内容和图片
-						var parseContent=JSON.parse(tmp.content);
-						_this.articleInfo.content=parseContent.content;
-						for (var i = 0; i < parseContent.imgs.length; i++) {
-							var tmpImgObj={
-								id:i,
-								type: 'image',
-								url: _this.apiUrl+parseContent.imgs[i]
-							};
-							this.swiperList.push(tmpImgObj);
-						}
-						//评论浏览点赞数
-						//获取用户昵称
-						if(!tmp.annoymous){
-							uni.request({
-								url: this.apiUrl+'/user/profile/get?userId='+tmp.userId,
-								method: 'GET',
-								header:{
-									authorization:uni.getStorageSync('userToken')
-								},
-								success: res1 => {
-									console.log(res1);
-									_this.nickname=res1.data.nickname;
-								}
-							});
-						}
-						
-					}
-				});
-			}
+			_this = this;
+			this.getArticleDetail(e.id);
 			
 		},
 		methods: {
-			goback(){
+			goback() {
 				uni.navigateBack({
-					delta:1,
-					animationType:'slide-out-bottom'
+					delta: 1,
+					animationType: 'slide-out-bottom'
 				})
+			},
+			getArticleDetail(articleId){
+				uni.request({
+					url: this.apiUrl + '/article/get?articleId=' + articleId,
+					method: 'GET',
+					header: {
+						authorization: uni.getStorageSync('userToken')
+					},
+					success: res => {
+						this.articleInfo = res.data;
+						var tmp = res.data;
+						//头像
+						this.avatar = this.apiUrl + '/user/profile/avatar?userId=' + tmp.userId;
+						//内容和图片
+						var parseContent = JSON.parse(tmp.content);
+						_this.articleInfo.content = parseContent.content;
+						for (var i = 0; i < parseContent.imgs.length; i++) {
+							var tmpImgObj = {
+								id: i,
+								type: 'image',
+								url: _this.apiUrl + parseContent.imgs[i]
+							};
+							this.swiperList.push(tmpImgObj);
+						}
+						//获取用户昵称
+						if (!tmp.annoymous) {
+							uni.request({
+								url: _this.apiUrl + '/user/profile/get?userId=' + tmp.userId,
+								method: 'GET',
+								header: {
+									authorization: uni.getStorageSync('userToken')
+								},
+								success: res1 => {
+									_this.nickname = res1.data.nickname;
+								}
+							});
+						}
+						//获取点赞状态
+						this.initPraise();
+					}
+				});
+			},
+			initPraise(){
+				uni.request({
+					url: this.apiUrl+'/praise/get?type=0&targetId='+this.articleInfo.id,
+					method: 'GET',
+					header:{authorization:uni.getStorageSync('userToken')},
+					success: res => {
+						if(res.data.ok){
+							this.islike=true;
+						}else{
+							this.islike=false;
+						}
+					}
+				});
 			},
 			InputFocus(e) {
 				this.InputBottom = e.detail.height
@@ -182,16 +191,16 @@
 			InputBlur(e) {
 				this.InputBottom = 0
 			},
-			dofollow(){
-				if(this.isfollow){
+			dofollow() {
+				if (this.isfollow) {
 					uni.showModal({
-						confirmText:'确认',
-						cancelText:'取消',
-						content:'确认不再关注?',
-						success:res => {
-							if(res.confirm){
-								this.isfollow=false;
-								this.followText='关注';
+						confirmText: '确认',
+						cancelText: '取消',
+						content: '确认不再关注?',
+						success: res => {
+							if (res.confirm) {
+								this.isfollow = false;
+								this.followText = '关注';
 								//TODO
 								// uni.request({
 								// 	url: '',
@@ -204,9 +213,9 @@
 							}
 						}
 					})
-				}else{
-					this.articleInfo.isfollow=true;
-					this.followText='已关注';
+				} else {
+					this.articleInfo.isfollow = true;
+					this.followText = '已关注';
 					// TODO
 					// uni.request({
 					// 	url: '',
@@ -221,10 +230,10 @@
 			cardSwiper(e) {
 				this.cardCur = e.detail.current
 			},
-			dofavor(){
-				if(this.isfavor){
-					this.isfavor=false;
-					this.favoricon='favor';
+			dofavor() {
+				if (this.isfavor) {
+					this.isfavor = false;
+					this.favoricon = 'favor';
 					// uni.request({
 					// 	url: '',
 					// 	method: 'GET',
@@ -233,9 +242,9 @@
 					// 	fail: () => {},
 					// 	complete: () => {}
 					// });
-				}else{
-					this.isfavor=true;
-					this.favoricon='favorfill';
+				} else {
+					this.isfavor = true;
+					this.favoricon = 'favorfill';
 					// TODO
 					// uni.request({
 					// 	url: '',
@@ -247,49 +256,53 @@
 					// });
 				}
 			},
-			dolike(){
-				if(this.islike){
-					this.islike=false;
-					this.likeicon='like';
-					// uni.request({
-					// 	url: '',
-					// 	method: 'GET',
-					// 	data: {},
-					// 	success: res => {},
-					// 	fail: () => {},
-					// 	complete: () => {}
-					// });
-				}else{
-					this.islike=true;
-					this.likeicon='likefill';
-					// TODO
-					// uni.request({
-					// 	url: '',
-					// 	method: 'GET',
-					// 	data: {},
-					// 	success: res => {},
-					// 	fail: () => {},
-					// 	complete: () => {}
-					// });
+			dolike() {
+				if (this.islike) {
+					this.islike = false;
+					uni.request({
+						url: this.apiUrl+'/praise/remove?type=0&targetId='+this.articleInfo.id,
+						method: 'GET',
+						header:{'authorization':uni.getStorageSync('userToken')},
+						success: res => {
+							console.log(res);
+							if(!res.data.ok){
+								uni.showToast({
+									icon:'none',
+									title: res.data.msg
+								});
+							}
+						}
+					});
+				} else {
+					this.islike = true;
+					uni.request({
+						url: this.apiUrl+'/praise/add?type=0&targetId='+this.articleInfo.id,
+						method: 'GET',
+						header:{'authorization':uni.getStorageSync('userToken')},
+						success: res => {
+							console.log(res);
+						}
+					});
 				}
 			}
-			
-			
-			
+
+
+
 		}
 	}
 </script>
 
 <style>
-	page{
+	page {
 		background-color: #FFFFFF;
 	}
+
 	.status_bar {
 		height: var(--status-bar-height);
 		width: 100%;
 		background-color: #ffffff;
 	}
-	
+
 	.top_view {
 		height: var(--status-bar-height);
 		width: 100%;
@@ -298,10 +311,12 @@
 		top: 0;
 		z-index: 999;
 	}
+
 	.content {
 		height: 100%;
 		background-color: #FFFFFF;
 	}
+
 	.example-body {
 		flex-direction: row;
 		flex-wrap: wrap;
@@ -310,16 +325,18 @@
 		font-size: 14px;
 		background-color: #ffffff;
 	}
-	
+
 	.uni-nav-bar-text {
 		font-size: 28rpx;
 	}
-	.nickname{
+
+	.nickname {
 		font-size: 32upx;
 		text-align: center;
 		margin-left: 10upx;
 	}
-	.followbtn{
+
+	.followbtn {
 		height: 50upx;
 		width: 100%;
 		margin: 0;
@@ -328,21 +345,25 @@
 		text-align: center;
 		line-height: 30upx;
 	}
-	.detail{
+
+	.detail {
 		margin-bottom: 15upx;
 	}
-	.cText{
+
+	.cText {
 		margin: 20upx auto;
 		text-align: start;
 		width: 95%;
 		font-size: 32upx;
 		line-height: 40upx;
 	}
-	.pdate{
+
+	.pdate {
 		text-align: left;
 		margin-right: 10upx;
 	}
-	.fontsize{
+
+	.fontsize {
 		font-size: 40upx;
 		margin: 0 20upx;
 	}
