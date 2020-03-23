@@ -102,9 +102,13 @@
 			pageNumber=1;
 			this.getArticles();
 		},
-		onPullDownRefresh() {
+		onShow() {
+			_self.list=[];
 			this.getArticles();
-			
+		},
+		onPullDownRefresh() {
+			_self.list=[];
+			this.getArticles();
 		},
 		onReachBottom() {
 			if(this.loadText=='下拉加载更多'){
@@ -185,6 +189,7 @@
 							}
 						}
 						//刷新->取代
+						
 						_self.list=tmpList;
 						pageCount=res.data.pager.pageCount;
 						//下一页

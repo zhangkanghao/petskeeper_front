@@ -15,7 +15,7 @@
 						<text class="water-name">{{item.name}}</text>
 					</view>
 					<view class="water-bottom-item cu-item">
-						<text class="bottom-good" :class="['cuIcon-'+(item.isLiked?'likefill':'like'),'text-'+(item.isLiked?'red':'gray')]"></text>
+						<text class="bottom-good" :class="['cuIcon-'+(item.isLiked?'likefill':'like'),'text-'+(item.isLiked?'red':'gray')]" @tap="dolike(1,index)"></text>
 						<text class="water-num">{{item.likeCount}}</text>
 					</view>
 				</view>
@@ -36,7 +36,7 @@
 						<text class="water-name">{{item.name}}</text>
 					</view>
 					<view class="water-bottom-item">
-						<text class="bottom-good" :class="['cuIcon-'+(item.isLiked?'likefill':'like'),'text-'+(item.isLiked?'red':'gray')]"></text>
+						<text class="bottom-good" :class="['cuIcon-'+(item.isLiked?'likefill':'like'),'text-'+(item.isLiked?'red':'gray')]" @tap="dolike(2,index)"></text>
 						<text class="water-num">{{item.likeCount}}</text>
 					</view>
 				</view>
@@ -69,11 +69,47 @@
 			};
 		},
 		methods: {
-			like(){
-				console.log('like press');
+			dolike(col,index){
+				console.log(col);
+				console.log(index);
+				var like,articleId;
+				if(col==1){
+					like=this.columnFirst[index].isLiked;
+					this.columnFirst[index].isLiked=!like;
+					articleId=this.columnFirst[index].id;
+				}else if(col==2){
+					like=this.columnSecond[index].isLiked;
+					this.columnSecond[index].isLiked=!like;
+					articleId=this.columnSecond[index].id;
+				}
+				console.log(like+' '+articleId);
+				if(!like){
+					uni.request({
+						url: this.apiUrl+'/praise/add?type=0&targetId='+articleId,
+						method: 'GET',
+						header:{'authorization':uni.getStorageSync('userToken')},
+						success: res => {
+							console.log(res);
+						}
+					});
+				}else{
+					uni.request({
+						url: this.apiUrl+'/praise/remove?type=0&targetId='+articleId,
+						method: 'GET',
+						header:{'authorization':uni.getStorageSync('userToken')},
+						success: res => {
+							console.log(res);
+							if(!res.data.ok){
+								uni.showToast({
+									icon:'none',
+									title: res.data.msg
+								});
+							}
+						}
+					});
+				}
 			},
 			toDetail(e){
-				console.log(e);
 				uni.navigateTo({
 					url: '/pages/detail/release/release?id='+e.currentTarget.dataset.id
 				});

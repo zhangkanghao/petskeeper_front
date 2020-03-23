@@ -67,9 +67,13 @@
 			pageNumber = 1;
 			this.getArticles();
 		},
-		onPullDownRefresh() {
+		onShow() {
+			this.list=[];
 			this.getArticles();
-
+		},
+		onPullDownRefresh() {
+			this.list=[];
+			this.getArticles();
 		},
 		onReachBottom() {
 			if (this.loadText == '下拉加载更多') {
