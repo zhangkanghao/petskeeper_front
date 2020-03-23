@@ -168,6 +168,8 @@
 						}
 						//获取点赞状态
 						this.initPraise();
+						//获取收藏状态
+						this.initCollect();
 					}
 				});
 			},
@@ -181,6 +183,21 @@
 							this.islike=true;
 						}else{
 							this.islike=false;
+						}
+					}
+				});
+			},
+			initCollect(){
+				uni.request({
+					url: this.apiUrl+'/collect/get?articleId='+this.articleInfo.id,
+					method: 'GET',
+					header:{authorization:uni.getStorageSync('userToken')},
+					success: res => {
+						console.log(res);
+						if(res.data.ok){
+							this.isfavor=true;
+						}else{
+							this.isfavor=false;
 						}
 					}
 				});
@@ -233,27 +250,30 @@
 			dofavor() {
 				if (this.isfavor) {
 					this.isfavor = false;
-					this.favoricon = 'favor';
-					// uni.request({
-					// 	url: '',
-					// 	method: 'GET',
-					// 	data: {},
-					// 	success: res => {},
-					// 	fail: () => {},
-					// 	complete: () => {}
-					// });
+					uni.request({
+						url: this.apiUrl+'/collect/remove?articleId='+this.articleInfo.id,
+						method: 'GET',
+						header:{'authorization':uni.getStorageSync('userToken')},
+						success: res => {
+							console.log(res);
+							if(!res.data.ok){
+								uni.showToast({
+									icon:'none',
+									title: res.data.msg
+								});
+							}
+						}
+					});
 				} else {
 					this.isfavor = true;
-					this.favoricon = 'favorfill';
-					// TODO
-					// uni.request({
-					// 	url: '',
-					// 	method: 'GET',
-					// 	data: {},
-					// 	success: res => {},
-					// 	fail: () => {},
-					// 	complete: () => {}
-					// });
+					uni.request({
+						url: this.apiUrl+'/collect/add?articleId='+this.articleInfo.id,
+						method: 'GET',
+						header:{'authorization':uni.getStorageSync('userToken')},
+						success: res => {
+							console.log(res);
+						}
+					});
 				}
 			},
 			dolike() {
