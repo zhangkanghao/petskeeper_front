@@ -10,8 +10,8 @@
 				<block class="cu-item" slot="left">
 					<text class="lg text-black cuIcon-back" style="font-size: 40upx;margin-left: 10upx;"></text>
 				</block>
-				<block slot="right" style="width: 30%;">
-					<button class="cu-btn shadow followbtn" :class="isfollow?'bg-grey':'bg-orange'" @tap="dofollow">{{followText}}</button>
+				<block v-if="!isMe" slot="right" style="width: 30%;">
+					<button class="cu-btn shadow followbtn" :class="isfollow?'bg-grey':'bg-orange'" @tap="dofollow">{{isfollow?'已关注':'关注'}}</button>
 				</block>
 				<view class="padding input-view">
 					<image class="cu-avatar round" :src="avatar"></image>
@@ -86,6 +86,7 @@
 		data() {
 			return {
 				InputBottom: 0,
+				isMe:false,
 				avatar: '../../../static/img/extra/none.jpg',
 				articleInfo: {
 					id: 0,
@@ -112,7 +113,6 @@
 				}],
 				myOwn: false, //自己的文章
 				isfollow: false,
-				followText: '关注',
 				cardCur: 0,
 				isfavor: false,
 				islike: false,
@@ -121,7 +121,6 @@
 		onLoad(e) {
 			_this = this;
 			this.getArticleDetail(e.id);
-			
 		},
 		methods: {
 			goback() {
@@ -170,6 +169,12 @@
 						this.initPraise();
 						//获取收藏状态
 						this.initCollect();
+						//是否本人
+						//this.isMe=uni.getStorageSync('userId')==tmp.userId?true:false;
+						//获取关注状态
+						if(!this.isMe){
+							this.initFollow();
+						}
 					}
 				});
 			},
@@ -193,11 +198,24 @@
 					method: 'GET',
 					header:{authorization:uni.getStorageSync('userToken')},
 					success: res => {
-						console.log(res);
 						if(res.data.ok){
 							this.isfavor=true;
 						}else{
 							this.isfavor=false;
+						}
+					}
+				});
+			},
+			initFollow(){
+				uni.request({
+					url: this.apiUrl+'/follow/get?userId='+this.articleInfo.userId,
+					method: 'GET',
+					header:{authorization:uni.getStorageSync('userToken')},
+					success: res => {
+						if(res.data.ok){
+							this.isfollow=true;
+						}else{
+							this.isfollow=false;
 						}
 					}
 				});
@@ -217,31 +235,51 @@
 						success: res => {
 							if (res.confirm) {
 								this.isfollow = false;
-								this.followText = '关注';
-								//TODO
-								// uni.request({
-								// 	url: '',
-								// 	method: 'GET',
-								// 	data: {},
-								// 	success: res => {},
-								// 	fail: () => {},
-								// 	complete: () => {}
-								// });
+								uni.request({
+									url: this.apiUrl+'/follow/remove?userId='+this.articleInfo.userId,
+									method: 'GET',
+									header:{'authorization':uni.getStorageSync('userToken')},
+									success: res => {
+										if(!res.data.ok){
+											uni.showToast({
+												icon:'none',
+												position:'bottom',
+												title: res.data.msg
+											});
+										}else{
+											uni.showToast({
+												icon:'none',
+												position:'bottom',
+												title: '取关成功'
+											});
+										}
+									}
+								});
 							}
 						}
 					})
 				} else {
-					this.articleInfo.isfollow = true;
-					this.followText = '已关注';
-					// TODO
-					// uni.request({
-					// 	url: '',
-					// 	method: 'GET',
-					// 	data: {},
-					// 	success: res => {},
-					// 	fail: () => {},
-					// 	complete: () => {}
-					// });
+					this.isfollow = true;
+					uni.request({
+						url: this.apiUrl+'/follow/add?userId='+this.articleInfo.userId,
+						method: 'GET',
+						header:{'authorization':uni.getStorageSync('userToken')},
+						success: res => {
+							if(!res.data.ok){
+								uni.showToast({
+									icon:'none',
+									position:'bottom',
+									title: res.data.msg
+								});
+							}else{
+								uni.showToast({
+									icon:'none',
+									position:'bottom',
+									title: '关注成功'
+								});
+							}
+						}
+					});
 				}
 			},
 			cardSwiper(e) {
@@ -255,11 +293,17 @@
 						method: 'GET',
 						header:{'authorization':uni.getStorageSync('userToken')},
 						success: res => {
-							console.log(res);
 							if(!res.data.ok){
 								uni.showToast({
 									icon:'none',
+									position:'bottom',
 									title: res.data.msg
+								});
+							}else{
+								uni.showToast({
+									icon:'none',
+									position:'bottom',
+									title: '取消收藏'
 								});
 							}
 						}
@@ -271,7 +315,19 @@
 						method: 'GET',
 						header:{'authorization':uni.getStorageSync('userToken')},
 						success: res => {
-							console.log(res);
+							if(!res.data.ok){
+								uni.showToast({
+									icon:'none',
+									position:'bottom',
+									title: res.data.msg
+								});
+							}else{
+								uni.showToast({
+									icon:'none',
+									position:'bottom',
+									title: '加入收藏'
+								});
+							}
 						}
 					});
 				}
@@ -284,7 +340,6 @@
 						method: 'GET',
 						header:{'authorization':uni.getStorageSync('userToken')},
 						success: res => {
-							console.log(res);
 							if(!res.data.ok){
 								uni.showToast({
 									icon:'none',
@@ -300,7 +355,12 @@
 						method: 'GET',
 						header:{'authorization':uni.getStorageSync('userToken')},
 						success: res => {
-							console.log(res);
+							if(!res.data.ok){
+								uni.showToast({
+									icon:'none',
+									title: res.data.msg
+								});
+							}
 						}
 					});
 				}
